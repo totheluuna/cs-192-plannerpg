@@ -1,61 +1,68 @@
-import React, { Component } from 'react';
-import { FlatList } from 'react-native';
+import React from 'react';
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  Keyboard,
+  StyleSheet,
+  AsyncStorage,
+} from 'react-native';
+
 import {Container, Header, Content, Card, CardItem, Text, Body, Left, Right, Button, Icon} from 'native-base';
 
-const content = [
-	{key: 'Devin'},
-	{key: 'Jackson'},
-	{key: 'James'},
-	{key: 'Joel'},
-	{key: 'John'},
-	{key: 'Jillian'},
-	{key: 'Jimmy'},
-	{key: 'Julie'},
-]
+const width=100;
+const height=150;
 
-const memoArray = [
-	{title: "CS 192", content: {content}},
-	{title: "CS 192", content: {content}},
-	{title: "CS 192", content: {content}},
-];
+export default class Memo extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      memoTitle: "",
+      memoText: "",
+      x: 0,
+      y: 0,
+      array: [0,1,2,3],
+    };
+  }
 
-// <FlatList
-// 	data={[
-// 		{key: 'Devin'},
-// 		{key: 'Jackson'},
-// 		{key: 'James'},
-// 		{key: 'Joel'},
-// 		{key: 'John'},
-// 		{key: 'Jillian'},
-// 		{key: 'Jimmy'},
-// 		{key: 'Julie'},
-// 	]}
-// 	renderItem={({item}) => <Text>{item.key}</Text>}
-// />
-
-export default class Memo extends Component {
-	render() {
+  render() {
     return (
-				<Card>
-					<CardItem header >
-						<Text>CS 192 Memo Title</Text>
-					</CardItem>
-					<CardItem button onPress={() => alert("This is Card Body")}>
-						<Body>
-							<Text> Write your memos here.</Text>
-						</Body>
-					</CardItem>
-					<CardItem footer>
-						<Left>
-							<Button transparent>
-								<Icon name='heart-empty' style={{color: '#000'}}/>
-							</Button>
-							<Button transparent>
-								<Icon name='trash' style={{color: '#000'}}/>
-							</Button>
-						</Left>
-					</CardItem>
-				</Card>
-		);
-	}
+      <Card key={this.props.keyval}>
+        <CardItem header >
+          <Text>CS 192 Memo Title</Text>
+        </CardItem>
+        <CardItem>
+          <Body>
+            <TextInput
+              multiline = {true}
+              style={{height: height-60, width: width-20}}
+              placeholder='Input text'
+              value={this.state.memoText}
+              onChangeText={(text) => this.setState({memoText: text})}
+            />
+          </Body>
+        </CardItem>
+        <CardItem>
+            <TouchableOpacity button transparent onPress={this.props.saveMethod}>
+              <Icon name='heart-empty' style={{color: '#000'}}/>
+            </TouchableOpacity>
+            <TouchableOpacity button transparent onPress={this.props.deleteMethod}>
+              <Icon name='trash' style={{color: '#000'}}/>
+            </TouchableOpacity>
+        </CardItem>
+      </Card>
+    )
+  }
 }
+
+const styles = StyleSheet.create({
+  memoContainer: {
+    backgroundColor: 'powderblue',
+    width: width,
+    height: height,
+    alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: '#000000',
+  }
+});
