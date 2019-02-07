@@ -26,6 +26,33 @@
 * Science, College of Engineering, University of the Philippines, Diliman for the
 * AY 2015-2016
 */
+
+/*
+ * Code History
+
+ * 2/7/19 - Datuluna Dilangalen - Added UI
+ * 2/7/19 - Rheeca Guion - Added constructor, addMemo, editMemo, deleteMemo, saveMemos,
+            getMemos, functions called on button presses, memos array to display
+            memos
+ * 2/8/19 - Rheeca Guion - add comments, cleanup
+*/
+
+/*
+ * File creation date: Feb. 3, 2019
+ * Development group:
+ * Client group:
+
+ * Purpose: Displays corkboard, displays memos, contains functions to add, edit,
+ * delete memos, and save, get memos from storage
+
+ * Variables:
+ *   memoArray; array of memos saved in state and in AsyncStorage
+ *   memos; array of memos from AsyncStorage to be displayed
+ *   key; unique key to identify memos
+ *   newMemo; holds new memo to be pushed into memoArray
+ *   arr; temporary array for editing memoArray
+ */
+
 import React, { Component } from 'react';
 import {
      Text,
@@ -37,18 +64,18 @@ import {
 import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View } from 'native-base';
 import Memo from './Memo';
 export default class ViewCorkboard extends Component {
-     constructor(props) {
+     constructor (props){
           super(props);
           this.state = {
                memoArray: [],
           };
      }
 
-     componentDidMount() {
-          this.displayMemos();
+     componentDidMount (){
+          this.getMemos();
      }
 
-     render() {
+     render (){
           let memos = this.state.memoArray.map((val, key) => {
                return <Memo key={key} keyval={key} val={val}
                deleteMethod={ () => this.deleteMemo(key) }
@@ -78,26 +105,44 @@ export default class ViewCorkboard extends Component {
           );
      }
 
-     addMemo() {
-          this.state.memoArray.push({
-               'memoTitle': "",
-               'memoText': "",
-               'x': 20,
-               'y': 20,
-          });
-          this.setState({ memoArray: this.state.memoArray });
+     addMemo (){
+       /*
+        * addMemo
+        * Creation date: Feb. 5, 2019
+        * Purpose: Adds a new blank memo
+        */
+       let newMemo = [
+         {memoId: 0, memoTitle: "", memoText: ""}
+       ];
+       let arr = this.state.memoArray;
+       arr.push(newMemo);
+       this.setState({ memoArray: arr });
      }
 
-     editMemo(key, val) {
-
+     editMemo (key, val){
+       /*
+        * editMemo
+        * Creation date: Feb. 5, 2019
+        * Purpose: Edits a memo
+        */
      }
 
-     deleteMemo(key) {
+     deleteMemo (key){
+          /*
+           * deleteMemo
+           * Creation date: Feb. 5, 2019
+           * Purpose: Deletes a memo
+           */
           this.state.memoArray.splice(key, 1);
           this.setState({memoArray: this.state.memoArray});
      }
 
      saveMemos = async() => {
+          /*
+           * saveMemos
+           * Creation date: Feb. 5, 2019
+           * Purpose: Save memos in AsyncStorage
+           */
           try {
                await AsyncStorage.setItem('memoArray', JSON.stringify(this.state.memoArray));
                alert("Saved!");
@@ -106,7 +151,12 @@ export default class ViewCorkboard extends Component {
           }
      };
 
-     displayMemos = async () => {
+     getMemos = async () => {
+          /*
+           * getMemos
+           * Creation date: Feb. 5, 2019
+           * Purpose: Get saved memos from AsyncStorage
+           */
           try {
                let temp = await AsyncStorage.getItem('memoArray');
                let parsed = JSON.parse(temp);

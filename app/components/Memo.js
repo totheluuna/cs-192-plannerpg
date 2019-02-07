@@ -26,6 +26,28 @@
 * Science, College of Engineering, University of the Philippines, Diliman for the
 * AY 2015-2016
 */
+
+/*
+ * Code History
+
+ * 2/7/19 - Datuluna Dilangalen - Added UI
+ * 2/7/19 - Rheeca Guion - Added constructor, props, TextInput, and the functions
+ *          called on button presses
+ * 2/8/19 - Rheeca Guion - add comments, cleanup
+ */
+
+/*
+ * File creation date: Feb. 3, 2019
+ * Development group:
+ * Client group:
+
+ * Purpose: Defines the individual instance of a memo
+
+ * Variables:
+ *   memoTitle: contains memo title
+ *   memoText: contains memo text
+ */
+
 import React from 'react';
 import {
      View,
@@ -39,33 +61,31 @@ import {
 
 import {Container, Header, Content, Card, CardItem, Text, Body, Left, Right, Button, Icon} from 'native-base';
 
-const width=100;
-const height=150;
-
 export default class Memo extends React.Component {
-     constructor(props) {
+     constructor (props){
           super(props);
           this.state = {
+               memoId: 0,
                memoTitle: "",
                memoText: "",
-               x: 0,
-               y: 0,
-               array: [0,1,2,3],
           };
      }
 
-     render() {
+     render (){
           return (
                <Card key={this.props.keyval}>
                     <CardItem header >
-                         <Text>CS 192 Memo Title</Text>
+                    <TextInput
+                         multiline = {true}
+                         placeholder='Title'
+                         value={this.state.memoTitle}
+                         onChangeText={(text) => this.setState({memoTitle: text})}/>
                     </CardItem>
                     <CardItem>
                          <Body>
                               <TextInput
                                    multiline = {true}
-                                   style={{height: height-60, width: width-20}}
-                                   placeholder='Input text'
+                                   placeholder='Memo'
                                    value={this.state.memoText}
                                    onChangeText={(text) => this.setState({memoText: text})}/>
                          </Body>
@@ -82,14 +102,3 @@ export default class Memo extends React.Component {
           )
      }
 }
-
-const styles = StyleSheet.create({
-     memoContainer: {
-          backgroundColor: 'powderblue',
-          width: width,
-          height: height,
-          alignItems: 'center',
-          borderWidth: 0.5,
-          borderColor: '#000000',
-     }
-});

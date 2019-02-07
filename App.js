@@ -1,7 +1,7 @@
 /*
 * MIT License
 
-* Copyright (c) 2019 Datuluna Ali G. Dilangalen, Rheeca S. Guion
+* Copyright (c) 2019 Datuluna Ali G. Dilangalen
 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,23 @@
 * Science, College of Engineering, University of the Philippines, Diliman for the
 * AY 2015-2016
 */
+
+/*
+ * Code History
+
+ * 2/7/19 - Datuluna Dilangalen - Added UI
+ */
+
+/*
+ * File creation date: Feb. 3, 2019
+ * Development group:
+ * Client group:
+
+ * Purpose: Index of the app, calls ViewCorkboard, etc.
+
+ * Variables:
+ *
+ */
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
