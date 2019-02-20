@@ -73,7 +73,7 @@ export default class Memo extends React.Component {
 
      render (){
           return (
-               <Card key={this.props.keyval}>
+               <Card key={this.state.memoId}>
                     <CardItem header >
                     <TextInput
                          multiline = {true}

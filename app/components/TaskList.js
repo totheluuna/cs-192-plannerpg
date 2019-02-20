@@ -19,18 +19,16 @@
 * This is a course requirement for CS 192 Software Engineering II under the
 * supervision of Asst. Prof. Ma. Rowena C. Solamo of the Department of Computer
 * Science, College of Engineering, University of the Philippines, Diliman for the
-* AY 2018-2019
+* AY 2015-2016
 */
 
 /*
  * Code History
-
- * 2/07/19 - Datuluna Dilangalen - Added UI
- * 2/07/19 - Rheeca Guion - Added constructor, addMemo, editMemo, deleteMemo, saveMemos,
+ * 2/7/19 - Datuluna Dilangalen - Added UI
+ * 2/7/19 - Rheeca Guion - Added constructor, addMemo, editMemo, deleteMemo, saveMemos,
             getMemos, functions called on button presses, memos array to display
             memos
- * 2/08/19 - Rheeca Guion - add comments, cleanup
- * 2/18/19 - Rheeca Guion - renamed to Corkboard
+ * 2/8/19 - Rheeca Guion - add comments, cleanup
 */
 
 /*
@@ -56,60 +54,64 @@ import {
      AsyncStorage
 } from 'react-native';
 import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View } from 'native-base';
-import Memo from './Memo';
-export default class Corkboard extends Component {
+import Task from './Task';
+export default class ViewCorkboard extends Component {
      constructor (props){
           super(props);
           this.state = {
-               memoArray: [],
-               currId: 0,
+              taskArray: [],
+              currId: 0,
           };
      }
 
      componentDidMount (){
-          this.getMemos();
+          this.getTasks();
      }
 
      render (){
-          let memos = this.state.memoArray.map((num) => {
-               return <Memo key={num}
-               deleteMethod={ () => this.deleteMemo(num) }
-               saveMethod={ () => this.saveMemos }/>
+          let tasks = this.state.taskArray.map((key) => {
+               return <Task key={key}
+               deleteMethod={ () => this.deleteTask(key) }
+               saveMethod={ () => this.saveTasks }/>
           });
-          console.log(memos);
           return (
                <Container>
                     <Header>
+                         <Left>
+                              <Button transparent>
+                              <Icon name='arrow-back' />
+                              </Button>
+                         </Left>
                          <Body>
-                              <Title>Corkboard</Title>
+                              <Title>Tasklist</Title>
                          </Body>
                               <Right>
-                                   <Button onPress={ this.addMemo.bind(this) }>
+                                   <Button onPress={ this.addTask.bind(this) }>
                                         <Icon name='add' />
                                    </Button>
                               </Right>
                          </Header>
-                    <Content>
-                    {memos}
-                    </Content>
+                  <Content>
+                  {tasks}
+                  </Content>
                </Container>
           );
      }
 
-     addMemo (){
+     addTask (){
        /*
         * addMemo
         * Creation date: Feb. 5, 2019
         * Purpose: Adds a new blank memo
         */
-       let newMemo = this.state.currId;
-       let arr = this.state.memoArray;
-       arr.push(newMemo);
+       let newTask = this.state.currId;
+       let arr = this.state.taskArray;
+       arr.push(newTask);
        this.setState({ currId: this.state.currId+1 });
-       this.setState({ memoArray: arr });
+       this.setState({ taskArray: arr });
      }
 
-     editMemo (key, val){
+     editTask (key, val){
        /*
         * editMemo
         * Creation date: Feb. 5, 2019
@@ -117,41 +119,41 @@ export default class Corkboard extends Component {
         */
      }
 
-     deleteMemo (key){
+     deleteTask (key){
           /*
            * deleteMemo
            * Creation date: Feb. 5, 2019
            * Purpose: Deletes a memo
            */
-          this.state.memoArray.splice( this.state.memoArray.indexOf(key), 1);
-          this.setState({memoArray: this.state.memoArray});
+          this.state.taskArray.splice( this.state.taskArray.indexOf(key) , 1);
+          this.setState({taskArray: this.state.taskArray});
      }
 
-     saveMemos = async() => {
+     saveTasks = async() => {
           /*
            * saveMemos
            * Creation date: Feb. 5, 2019
            * Purpose: Save memos in AsyncStorage
            */
           try {
-               await AsyncStorage.setItem('memoArray', JSON.stringify(this.state.memoArray));
+               await AsyncStorage.setItem('taskArray', JSON.stringify(this.state.taskArray));
                alert("Saved!");
           } catch (error) {
                alert(error);
           }
      };
 
-     getMemos = async () => {
+     getTasks = async () => {
           /*
            * getMemos
            * Creation date: Feb. 5, 2019
            * Purpose: Get saved memos from AsyncStorage
            */
           try {
-               let temp = await AsyncStorage.getItem('memoArray');
+               let temp = await AsyncStorage.getItem('taskArray');
                let parsed = JSON.parse(temp);
                if(parsed) {
-                    this.setState({memoArray: parsed})
+                    this.setState({taskArray: parsed})
                }
                //alert(parsed);
           } catch (error) {
