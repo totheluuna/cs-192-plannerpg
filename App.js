@@ -53,8 +53,7 @@ import getTheme from './native-base-theme/components';
 import variable from './native-base-theme/variables/variable';
 import { Font, AppLoading } from 'expo';
 import Corkboard from './app/components/Corkboard';
-import Tasklist from './app/components/Tasklist';
-import Styles from './app/components/Stylesheet';
+import TaskList from './app/components/TaskList';
 
 class Home extends React.Component {
   render() {
@@ -66,8 +65,8 @@ class Home extends React.Component {
             <Tab heading="Corkboard">
               <Corkboard />
             </Tab>
-            <Tab heading="Tasklist">
-              <Tasklist />
+            <Tab heading="Task List">
+              <TaskList />
             </Tab>
           </Tabs>
         </Container>
