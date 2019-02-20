@@ -24,13 +24,14 @@
 * This is a course requirement for CS 192 Software Engineering II under the
 * supervision of Asst. Prof. Ma. Rowena C. Solamo of the Department of Computer
 * Science, College of Engineering, University of the Philippines, Diliman for the
-* AY 2015-2016
+* AY 2018-2019
 */
 
 /*
  * Code History
 
- * 2/7/19 - Datuluna Dilangalen - Added UI
+ * 2/07/19 - Datuluna Dilangalen - Added UI
+ * 2/20/19 - Rheeca Guion - Added tab navigation
  */
 
 /*
@@ -38,7 +39,8 @@
  * Development group:
  * Client group:
 
- * Purpose: Index of the app, calls ViewCorkboard, etc.
+ * Purpose: Index of the app. Contains navigation for Corkboard
+ *   and Tasklist
 
  * Variables:
  *
@@ -46,11 +48,36 @@
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Container } from 'native-base';
+import { Container, Header, Tab, Tabs, ScrollableTab, Text, StyleProvider } from 'native-base';
+import getTheme from './native-base-theme/components';
+import variable from './native-base-theme/variables/variable';
 import { Font, AppLoading } from 'expo';
-import ViewCorkboard from './app/components/ViewCorkboard';
+import Corkboard from './app/components/Corkboard';
+import Tasklist from './app/components/Tasklist';
+import Styles from './app/components/Stylesheet';
 
-export default class App extends Component {
+class Home extends React.Component {
+  render() {
+    return (
+      <StyleProvider style={getTheme(variable)}>
+        <Container>
+          <Header />
+          <Tabs renderTabBar={()=> <ScrollableTab />}>
+            <Tab heading="Corkboard">
+              <Corkboard />
+            </Tab>
+            <Tab heading="Tasklist">
+              <Tasklist />
+            </Tab>
+          </Tabs>
+        </Container>
+      </StyleProvider>
+    );
+  }
+}
+
+
+export default class App extends React.Component {
      constructor() {
           super();
           this.state = {
@@ -61,6 +88,11 @@ export default class App extends Component {
           this.loadFonts();
      }
      async loadFonts() {
+          /*
+           * loadFonts
+           * Creation date: Feb. 6, 2019
+           * Purpose: Loads a custom font (error fix for incompatible fonts for android devices)
+           */
           await Expo.Font.loadAsync({
                Roboto: require("./node_modules/native-base/Fonts/Roboto.ttf"),
                Roboto_medium: require("./node_modules/native-base/Fonts/Roboto_medium.ttf"),
@@ -74,9 +106,7 @@ export default class App extends Component {
           }
 
           return (
-               <Container>
-                    <ViewCorkboard/>
-               </Container>
+               <Home/>
           );
      }
 }

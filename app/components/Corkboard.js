@@ -24,17 +24,18 @@
 * This is a course requirement for CS 192 Software Engineering II under the
 * supervision of Asst. Prof. Ma. Rowena C. Solamo of the Department of Computer
 * Science, College of Engineering, University of the Philippines, Diliman for the
-* AY 2015-2016
+* AY 2018-2019
 */
 
 /*
  * Code History
 
- * 2/7/19 - Datuluna Dilangalen - Added UI
- * 2/7/19 - Rheeca Guion - Added constructor, addMemo, editMemo, deleteMemo, saveMemos,
+ * 2/07/19 - Datuluna Dilangalen - Added UI
+ * 2/07/19 - Rheeca Guion - Added constructor, addMemo, editMemo, deleteMemo, saveMemos,
             getMemos, functions called on button presses, memos array to display
             memos
- * 2/8/19 - Rheeca Guion - add comments, cleanup
+ * 2/08/19 - Rheeca Guion - add comments, cleanup
+ * 2/18/19 - Rheeca Guion - renamed to Corkboard
 */
 
 /*
@@ -63,7 +64,7 @@ import {
 } from 'react-native';
 import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View } from 'native-base';
 import Memo from './Memo';
-export default class ViewCorkboard extends Component {
+export default class Corkboard extends Component {
      constructor (props){
           super(props);
           this.state = {
@@ -84,11 +85,6 @@ export default class ViewCorkboard extends Component {
           return (
                <Container>
                     <Header>
-                         <Left>
-                              <Button transparent>
-                              <Icon name='arrow-back' />
-                              </Button>
-                         </Left>
                          <Body>
                               <Title>Corkboard</Title>
                          </Body>
