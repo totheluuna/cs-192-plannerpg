@@ -48,6 +48,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container } from 'native-base';
 import { Font, AppLoading } from 'expo';
+import TaskList from './app/components/TaskList';
 import ViewCorkboard from './app/components/ViewCorkboard';
 
 export default class App extends Component {
@@ -75,7 +76,7 @@ export default class App extends Component {
 
           return (
                <Container>
-                    <ViewCorkboard/>
+                    <TaskList/>
                </Container>
           );
      }
