@@ -30,6 +30,9 @@
             getMemos, functions called on button presses, memos array to display
             memos
  * 2/08/19 - Rheeca Guion - add comments, cleanup
+ * 2/16/19 - Angelo Vincent R. Delos Santos - Added currId to constructor, fixed the
+            delete functionality to delete the proper memo (fixed memo mapping in Render,
+            modified addMemo, modified deleteMemo)
  * 2/18/19 - Rheeca Guion - renamed to Corkboard
 */
 
@@ -49,14 +52,17 @@
 
 import React, { Component } from 'react';
 import {
+     View,
      Text,
      TextInput,
      Image,
      TouchableOpacity,
      AsyncStorage
 } from 'react-native';
-import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View } from 'native-base';
+import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab } from 'native-base';
 import Memo from './Memo';
+import styles from './Styles';
+
 export default class Corkboard extends Component {
      constructor (props){
           super(props);
@@ -70,27 +76,36 @@ export default class Corkboard extends Component {
           this.getMemos();
      }
 
+     displayMemos (memos) {
+          if (memos && memos.length > 0) {
+               return (
+                    memos
+               );
+          } else {
+               return (
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                         <Text style={{ color: '#445C70' }}>There are no memos to show.</Text>
+                    </View>
+               );
+          }
+     }
+
      render (){
           let memos = this.state.memoArray.map((num) => {
                return <Memo key={num}
                deleteMethod={ () => this.deleteMemo(num) }
                saveMethod={ () => this.saveMemos }/>
           });
-          console.log(memos);
+
           return (
-               <Container>
-                    <Header>
-                         <Body>
-                              <Title>Corkboard</Title>
-                         </Body>
-                              <Right>
-                                   <Button onPress={ this.addMemo.bind(this) }>
-                                        <Icon name='add' />
-                                   </Button>
-                              </Right>
-                         </Header>
+               <Container style={styles.bg}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                         <Button onPress={ this.addMemo.bind(this) } transparent >
+                              <Icon name='add' style={{color: '#E2858D'}}/>
+                         </Button>
+                    </View>
                     <Content>
-                    {memos}
+                    {this.displayMemos(memos)}
                     </Content>
                </Container>
           );

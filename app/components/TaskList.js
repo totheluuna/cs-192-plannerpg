@@ -1,6 +1,6 @@
 /*
 * MIT License
-* Copyright (c) 2019 Datuluna Ali G. Dilangalen, Rheeca S. Guion
+* Copyright (c) 2019 Angelo Vincent R. Delos Santos, Rheeca S. Guion
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
@@ -19,31 +19,31 @@
 * This is a course requirement for CS 192 Software Engineering II under the
 * supervision of Asst. Prof. Ma. Rowena C. Solamo of the Department of Computer
 * Science, College of Engineering, University of the Philippines, Diliman for the
-* AY 2015-2016
+* AY 2018-2019
 */
 
 /*
- * Code History
- * 2/7/19 - Datuluna Dilangalen - Added UI
- * 2/7/19 - Rheeca Guion - Added constructor, addMemo, editMemo, deleteMemo, saveMemos,
-            getMemos, functions called on button presses, memos array to display
-            memos
- * 2/8/19 - Rheeca Guion - add comments, cleanup
+* Code History
+* 2/16/19 - Angelo Vincent R. Delos Santos - Added constructor, addTask, editTask,
+deleteTask, saveTasks, getTasks, functions called on button presses,
+tasks array to display, tasks
+* 2/22/19 - Rheeca Guion - Added UI, styles
 */
 
 /*
- * File creation date: Feb. 3, 2019
- * Development group:
- * Client group:
- * Purpose: Displays corkboard, displays memos, contains functions to add, edit,
- * delete memos, and save, get memos from storage
- * Variables:
- *   memoArray; array of memos saved in state and in AsyncStorage
- *   memos; array of memos from AsyncStorage to be displayed
- *   key; unique key to identify memos
- *   newMemo; holds new memo to be pushed into memoArray
- *   arr; temporary array for editing memoArray
- */
+* File creation date: Feb. 16, 2019
+* Development group:
+* Client group:
+* Purpose: Displays tasklist, displays tasks, contains functions to add, edit,
+* delete tasks, and save, get tasks from storage
+* Variables:
+*   taskArray; array of tasks saved in state and in AsyncStorage
+*   tasks; array of tasks from AsyncStorage to be displayed
+*   num; unique key to identify tasks
+*   newTask; holds new task to be pushed into taskArray
+*   arr; temporary array for editing taskArray
+*   currId; id assigned to a new task
+*/
 
 import React, { Component } from 'react';
 import {
@@ -55,17 +55,33 @@ import {
 } from 'react-native';
 import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View } from 'native-base';
 import Task from './Task';
-export default class ViewCorkboard extends Component {
+import styles from './Styles';
+
+export default class TaskList extends Component {
      constructor (props){
           super(props);
           this.state = {
-              taskArray: [],
-              currId: 0,
+               taskArray: [],
+               currId: 0,
           };
      }
 
      componentDidMount (){
           this.getTasks();
+     }
+
+     displayTasks (tasks) {
+          if (tasks && tasks.length > 0) {
+               return (
+                    tasks
+               );
+          } else {
+               return (
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                         <Text style={{ color: '#445C70' }}>There are no tasks to show.</Text>
+                    </View>
+               );
+          }
      }
 
      render (){
@@ -75,66 +91,56 @@ export default class ViewCorkboard extends Component {
                saveMethod={ () => this.saveTasks }/>
           });
           return (
-               <Container>
-                    <Header>
-                         <Left>
-                              <Button transparent>
-                              <Icon name='arrow-back' />
-                              </Button>
-                         </Left>
-                         <Body>
-                              <Title>Tasklist</Title>
-                         </Body>
-                              <Right>
-                                   <Button onPress={ this.addTask.bind(this) }>
-                                        <Icon name='add' />
-                                   </Button>
-                              </Right>
-                         </Header>
-                  <Content>
-                  {tasks}
-                  </Content>
+               <Container style={styles.bg}>
+                    <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                         <Button onPress={ this.addTask.bind(this) } transparent >
+                              <Icon name='add' style={{color: '#E2858D'}}/>
+                         </Button>
+                    </View>
+                    <Content>
+                    {this.displayTasks(tasks)}
+                    </Content>
                </Container>
           );
      }
 
      addTask (){
-       /*
-        * addMemo
-        * Creation date: Feb. 5, 2019
-        * Purpose: Adds a new blank memo
-        */
-       let newTask = this.state.currId;
-       let arr = this.state.taskArray;
-       arr.push(newTask);
-       this.setState({ currId: this.state.currId+1 });
-       this.setState({ taskArray: arr });
+          /*
+          * addTask
+          * Creation date: Feb. 16, 2019
+          * Purpose: Adds a new blank task
+          */
+          let newTask = this.state.currId;
+          let arr = this.state.taskArray;
+          arr.push(newTask);
+          this.setState({ currId: this.state.currId+1 });
+          this.setState({ taskArray: arr });
      }
 
      editTask (key, val){
-       /*
-        * editMemo
-        * Creation date: Feb. 5, 2019
-        * Purpose: Edits a memo
-        */
+          /*
+          * editTask
+          * Creation date: Feb. 16, 2019
+          * Purpose: Edits a task
+          */
      }
 
      deleteTask (key){
           /*
-           * deleteMemo
-           * Creation date: Feb. 5, 2019
-           * Purpose: Deletes a memo
-           */
+          * deleteTask
+          * Creation date: Feb. 16, 2019
+          * Purpose: Deletes a task
+          */
           this.state.taskArray.splice( this.state.taskArray.indexOf(key) , 1);
           this.setState({taskArray: this.state.taskArray});
      }
 
      saveTasks = async() => {
           /*
-           * saveMemos
-           * Creation date: Feb. 5, 2019
-           * Purpose: Save memos in AsyncStorage
-           */
+          * saveTasks
+          * Creation date: Feb. 16, 2019
+          * Purpose: Save tasks in AsyncStorage
+          */
           try {
                await AsyncStorage.setItem('taskArray', JSON.stringify(this.state.taskArray));
                alert("Saved!");
@@ -145,10 +151,10 @@ export default class ViewCorkboard extends Component {
 
      getTasks = async () => {
           /*
-           * getMemos
-           * Creation date: Feb. 5, 2019
-           * Purpose: Get saved memos from AsyncStorage
-           */
+          * getTasks
+          * Creation date: Feb. 16, 2019
+          * Purpose: Get saved tasks from AsyncStorage
+          */
           try {
                let temp = await AsyncStorage.getItem('taskArray');
                let parsed = JSON.parse(temp);

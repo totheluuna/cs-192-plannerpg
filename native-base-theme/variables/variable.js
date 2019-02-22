@@ -105,7 +105,7 @@ export default {
   checkboxTickColor: "#fff",
 
   // Color
-  brandPrimary: platform === "ios" ? "#007aff" : "#3F51B5",
+  brandPrimary: platform === "ios" ? "#007aff" : "#FBFBFF",
   brandInfo: "#62B1F6",
   brandSuccess: "#5cb85c",
   brandDanger: "#d9534f",
@@ -150,7 +150,7 @@ export default {
   // Header
   toolbarBtnColor: platform === "ios" ? "#007aff" : "#fff",
   toolbarDefaultBg: platform === "ios" ? "#F8F8F8" : "transparent",
-  toolbarHeight: platform === "ios" ? 64 : 56,
+  toolbarHeight: platform === "ios" ? 64 : 24,
   toolbarSearchIconSize: platform === "ios" ? 20 : 23,
   toolbarInputColor: platform === "ios" ? "#CECDD2" : "#fff",
   searchBarHeight: platform === "ios" ? 30 : 40,
@@ -158,6 +158,7 @@ export default {
   toolbarBtnTextColor: platform === "ios" ? "#007aff" : "#fff",
   toolbarDefaultBorder: platform === "ios" ? "#a7a6ab" : "transparent",
   iosStatusbar: platform === "ios" ? "dark-content" : "light-content",
+  elevation: 0,
   get statusBarColor() {
     return color(this.toolbarDefaultBg)
       .darken(0.2)
@@ -230,10 +231,10 @@ export default {
 
   // Tab
   tabDefaultBg: platform === "ios" ? "#F8F8F8" : "transparent",
-  topTabBarTextColor: platform === "ios" ? "#6b6b6b" : "#b3c7f9",
+  topTabBarTextColor: platform === "ios" ? "#6b6b6b" : "#445C70",
   topTabBarActiveTextColor: platform === "ios" ? "#007aff" : "#fff",
   topTabBarBorderColor: platform === "ios" ? "#a7a6ab" : "#fff",
-  topTabBarActiveBorderColor: platform === "ios" ? "#007aff" : "#fff",
+  topTabBarActiveBorderColor: platform === "ios" ? "#007aff" : "#66798A",
 
   // Tabs
   tabBgColor: "transparent",

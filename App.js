@@ -28,23 +28,23 @@
 */
 
 /*
- * Code History
+* Code History
 
- * 2/07/19 - Datuluna Dilangalen - Added UI
- * 2/20/19 - Rheeca Guion - Added tab navigation
- */
+* 2/07/19 - Datuluna Dilangalen - Added UI
+* 2/20/19 - Rheeca Guion - Added tab navigation, styles
+*/
 
 /*
- * File creation date: Feb. 3, 2019
- * Development group:
- * Client group:
+* File creation date: Feb. 3, 2019
+* Development group:
+* Client group:
 
- * Purpose: Index of the app. Contains navigation for Corkboard
- *   and Tasklist
+* Purpose: Index of the app. Contains navigation for Corkboard
+*   and Tasklist
 
- * Variables:
- *
- */
+* Variables:
+*
+*/
 
 import React, { Component } from 'react';
 import { View } from 'react-native';
@@ -54,25 +54,26 @@ import variable from './native-base-theme/variables/variable';
 import { Font, AppLoading } from 'expo';
 import Corkboard from './app/components/Corkboard';
 import TaskList from './app/components/TaskList';
+import styles from './app/components/Styles';
 
 class Home extends React.Component {
-  render() {
-    return (
-      <StyleProvider style={getTheme(variable)}>
-        <Container>
-          <Header />
-          <Tabs renderTabBar={()=> <ScrollableTab />}>
-            <Tab heading="Corkboard">
-              <Corkboard />
-            </Tab>
-            <Tab heading="Task List">
-              <TaskList />
-            </Tab>
-          </Tabs>
-        </Container>
-      </StyleProvider>
-    );
-  }
+     render() {
+          return (
+               <StyleProvider style={getTheme(variable)}>
+                    <Container style={{ backgroundColor: '#FBFBFF' }}>
+                         <Header/>
+                         <Tabs tabBarUnderlineStyle={{ }} >
+                              <Tab heading="Corkboard" tabStyle={{ backgroundColor: 'transparent' }} textStyle={{color: '#445C70'}} activeTabStyle={{backgroundColor: 'transparent'}} activeTextStyle={{color: '#445C70'}}>
+                                   <Corkboard />
+                              </Tab>
+                              <Tab heading="Task List" tabStyle={{ backgroundColor: 'transparent' }} textStyle={{color: '#445C70'}} activeTabStyle={{backgroundColor: 'transparent'}} activeTextStyle={{color: '#445C70'}}>
+                                   <TaskList />
+                              </Tab>
+                         </Tabs>
+                    </Container>
+               </StyleProvider>
+          );
+     }
 }
 
 
@@ -88,10 +89,10 @@ export default class App extends React.Component {
      }
      async loadFonts() {
           /*
-           * loadFonts
-           * Creation date: Feb. 6, 2019
-           * Purpose: Loads a custom font (error fix for incompatible fonts for android devices)
-           */
+          * loadFonts
+          * Creation date: Feb. 6, 2019
+          * Purpose: Loads a custom font (error fix for incompatible fonts for android devices)
+          */
           await Expo.Font.loadAsync({
                Roboto: require("./node_modules/native-base/Fonts/Roboto.ttf"),
                Roboto_medium: require("./node_modules/native-base/Fonts/Roboto_medium.ttf"),

@@ -1,4 +1,0 @@
-const styles = StyleSheet.create({
-
-
-});
