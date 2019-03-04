@@ -47,13 +47,25 @@
 */
 
 import React, { Component } from 'react';
-import { View } from 'react-native';
-import { Container, Header, Tab, Tabs, ScrollableTab, Text, StyleProvider } from 'native-base';
+import {
+     View,
+} from 'react-native';
+import {
+     Container,
+     Header,
+     Tab,
+     Tabs,
+     ScrollableTab,
+     Text,
+     StyleProvider
+} from 'native-base';
 import getTheme from './native-base-theme/components';
 import variable from './native-base-theme/variables/variable';
 import { Font, AppLoading } from 'expo';
+import Calendar from './app/components/Calendar';
 import Corkboard from './app/components/Corkboard';
 import TaskList from './app/components/TaskList';
+
 import styles from './app/components/Styles';
 
 class Home extends React.Component {
@@ -63,6 +75,9 @@ class Home extends React.Component {
                     <Container style={{ backgroundColor: '#FBFBFF' }}>
                          <Header/>
                          <Tabs tabBarUnderlineStyle={{ }} >
+                              <Tab heading="Calendar" tabStyle={{ backgroundColor: 'transparent' }} textStyle={{color: '#445C70'}} activeTabStyle={{backgroundColor: 'transparent'}} activeTextStyle={{color: '#445C70'}}>
+                                   <Calendar />
+                              </Tab>
                               <Tab heading="Corkboard" tabStyle={{ backgroundColor: 'transparent' }} textStyle={{color: '#445C70'}} activeTabStyle={{backgroundColor: 'transparent'}} activeTextStyle={{color: '#445C70'}}>
                                    <Corkboard />
                               </Tab>
@@ -75,7 +90,6 @@ class Home extends React.Component {
           );
      }
 }
-
 
 export default class App extends React.Component {
      constructor() {
