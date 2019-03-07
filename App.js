@@ -59,6 +59,7 @@ import {
      Text,
      StyleProvider
 } from 'native-base';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import getTheme from './native-base-theme/components';
 import variable from './native-base-theme/variables/variable';
 import { Font, AppLoading } from 'expo';
@@ -90,6 +91,10 @@ class Home extends React.Component {
           );
      }
 }
+
+const MainNavigator = createStackNavigator({
+     Home: { screen: Home },
+});
 
 export default class App extends React.Component {
      constructor() {

@@ -1,3 +1,52 @@
+/*
+* MIT License
+* Copyright (c) 2019 Rheeca S. Guion
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+* This is a course requirement for CS 192 Software Engineering II under the
+* supervision of Asst. Prof. Ma. Rowena C. Solamo of the Department of Computer
+* Science, College of Engineering, University of the Philippines, Diliman for the
+* AY 2018-2019
+*/
+
+/*
+* Code History
+* 3/05/19 - Rheeca Guion - created file, added calendar (renderHeader, renderWeek,
+*                          renderDays, onClick, prevMonth, nextMonth)
+* 3/07/19 - Rheeca Guion - enabled creation of schedules (addSchedule, deleteSchedule,
+*                          displaySchedules)
+*                        - saving of dates in the state (datesWithSchedules, the
+*                          functions hasDate, getDate)
+*
+*/
+
+/*
+* File creation date: Mar. 5, 2019
+* Development group:
+* Client group:
+* Purpose: Displays calendar, displays schedules, adds, edits, deletes schedules
+* Variables:
+*   currentMonth; the current month to display
+*   selectedDate; the selected date
+*   datesWithSchedules; array in state that saves dates with schedules
+*   currId; id assigned to a new schedule
+*   arr; temporary array for editing arrays from state
+*   currDate; date object from the datesWithSchedules array that matches selectedDate
+*/
+
 import React, {Component} from 'react';
 import {
      AsyncStorage,
@@ -11,11 +60,15 @@ import {
 import {
      Button,
      Container,
+     Content,
      Header,
      Icon,
+     List,
+     ListItem,
 } from 'native-base';
 
 import moment from "moment";
+import Schedule from './Schedule';
 import styles from './Styles';
 
 export default class Calendar extends Component {
@@ -24,12 +77,87 @@ export default class Calendar extends Component {
           this.state={
                currentMonth: new Date(),
                selectedDate: new Date(),
-               scheduleArray: [],
+               datesWithSchedules: [],
                currId: 0,
           };
      }
 
+     isEmpty (obj) {
+          /*
+          * isEmpty
+          * Creation date: Mar. 5, 2019
+          * Purpose: Returns true if an array is empty
+          */
+          for (let key in obj) {
+               if(obj.hasOwnProperty(key)) {
+                    return false;
+               }
+          }
+          return true;
+     }
+
+     hasDate (date) {
+          /*
+          * getDate
+          * Creation date: Mar. 5, 2019
+          * Purpose: Returns true if a dateWithSchedule object exists in
+          *          datesWithSchedules whose date = date
+          */
+          for (let dateItem in this.state.datesWithSchedules) {
+               if (moment(dateItem.date).isSame(date, 'day')) {
+                    return true;
+               }
+          }
+          return false;
+     }
+
+     getDate (date) {
+          /*
+          * getDate
+          * Creation date: Mar. 5, 2019
+          * Purpose: Returns dateWithSchedule object from datesWithSchedules
+          *          that corresponds to date
+          */
+          let arr = this.state.datesWithSchedules;
+          let currDate;
+          arr.map((dateItem) => {
+               if (moment(dateItem.date).isSame(date, 'day')) {
+                    currDate = dateItem;
+               }
+          });
+          return currDate;
+     }
+
+     displaySchedules (date){
+          /*
+          * displaySchedules
+          * Creation date: Mar. 5, 2019
+          * Purpose: Returns Schedule components for all schedules for the
+          *          selectedDate
+          */
+          if (this.hasDate(date)) {
+               currDate = this.getDate (date);
+               let schedules = currDate.schedulesArray.map((scheduleItem) => {
+                    return <Schedule
+                         key={scheduleItem.key}
+                         title={scheduleItem.title}
+                         start={scheduleItem.start}
+                         end={scheduleItem.end}
+                         deleteMethod={ () => this.deleteSchedule(scheduleItem.key) }
+                    />;
+               });
+               return schedules;
+          } else {
+               return false;
+          }
+     }
+
      renderHeader (){
+          /*
+          * renderHeader
+          * Creation date: Mar. 5, 2019
+          * Purpose: Renders the current month and year at the header
+          */
           const dateFormat = "MMMM YYYY";
 
           return (
@@ -48,6 +176,11 @@ export default class Calendar extends Component {
      }
 
      renderWeek (){
+          /*
+          * renderWeek
+          * Creation date: Mar. 5, 2019
+          * Purpose: Renders the names of the days of the week
+          */
           const dateFormat = "ddd";
           const days = [];
 
@@ -72,6 +205,11 @@ export default class Calendar extends Component {
      }
 
      renderDays (){
+          /*
+          * renderDays
+          * Creation date: Mar. 5, 2019
+          * Purpose: Renders days of the month
+          */
           const { currentMonth, selectedDate } = this.state;
           const monthStart = moment(currentMonth).startOf('month');
           const monthEnd = moment(monthStart).endOf('month');
@@ -140,11 +278,80 @@ export default class Calendar extends Component {
                          {this.renderDays()}
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                         <Button transparent >
+                         <Button onPress={ this.addSchedule.bind(this) } transparent >
                               <Icon name='add' style={{color: '#E2858D'}}/>
                          </Button>
                     </View>
+                    <Content>
+                         <List>
+                              {this.displaySchedules(this.state.selectedDate)}
+                         </List>
+                    </Content>
                </Container>
           );
+     }
+
+     addSchedule (){
+          /*
+          * addSchedule
+          * Creation date: Mar. 5, 2019
+          * Purpose: Adds a schedule
+          */
+          if (this.hasDate(this.state.selectedDate)) {
+               // Add schedules to date
+               let currDate = this.getDate(this.state.selectedDate);
+               let newSchedule = {
+                    key: currDate.currId,
+                    title: "",
+                    start: "",
+                    end: "",
+               };
+               currDate.currId = currDate.currId + 1;
+               currDate.schedulesArray.push(newSchedule);
+
+               let arr = this.state.datesWithSchedules;
+               let arr2 = arr.map((dateItem) => {
+                    if (moment(dateItem.date).isSame(currDate.date, 'day')) {
+                         dateItem.schedulesArray = currDate.schedulesArray;
+                    }
+                    return dateItem;
+               });
+               this.setState({ datesWithSchedules: arr2 });
+          } else {
+               // Add new date item to datesWithSchedules
+               let newDateWithSched = {
+                    date: this.state.selectedDate,
+                    schedulesArray: [],
+                    currId: 1,
+               };
+               newDateWithSched.schedulesArray.push({
+                    key: 0,
+                    title: "",
+                    start: "",
+                    end: "",
+               });
+               let arr = this.state.datesWithSchedules;
+               arr.push(newDateWithSched);
+               this.setState({ datesWithSchedules: arr });
+          }
+     }
+
+     deleteSchedule (key){
+          /*
+          * deleteSchedule
+          * Creation date: Mar. 5, 2019
+          * Purpose: Deletes a schedule
+          */
+          let currDate = this.getDate(this.state.selectedDate);
+          currDate.schedulesArray.splice( currDate.schedulesArray.indexOf(key) , 1);
+
+          let arr = this.state.datesWithSchedules;
+          let arr2 = arr.map((dateItem) => {
+               if (moment(dateItem.date).isSame(currDate.date, 'day')) {
+                    dateItem.schedulesArray = currDate.schedulesArray;
+               }
+               return dateItem;
+          });
+          this.setState({ datesWithSchedules: arr2 });
      }
 }

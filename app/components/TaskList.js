@@ -53,7 +53,15 @@ import {
      TouchableOpacity,
      AsyncStorage
 } from 'react-native';
-import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View } from 'native-base';
+import {
+     Container,
+     Content,
+     Header,
+     Title,
+     Button,
+     Icon,
+     View
+} from 'native-base';
 import Task from './Task';
 import styles from './Styles';
 
