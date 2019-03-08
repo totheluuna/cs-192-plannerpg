@@ -51,24 +51,140 @@ import {
      TextInput,
      Image,
      TouchableOpacity,
-     AsyncStorage
+     AsyncStorage,
+     ActivityIndicator
 } from 'react-native';
-import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View } from 'native-base';
+import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, View, Item, Input} from 'native-base';
 import Task from './Task';
 import styles from './Styles';
+import uuid from 'uuid/v1';
 
 export default class TaskList extends Component {
      constructor (props){
           super(props);
           this.state = {
-               taskArray: [],
-               currId: 0,
-          };
+     		inputValue: '',
+     		loadingItems: false,
+     		allItems: {},
+     		isCompleted: false
+     	};
      }
 
-     componentDidMount (){
-          this.getTasks();
-     }
+
+     // componentDidMount (){
+     //      // this.getTasks();
+     //      this.loadingItems
+     // }
+
+
+	componentDidMount = () => {
+		this.loadingItems();
+	};
+
+	newInputValue = value => {
+		this.setState({
+			inputValue: value
+		});
+	};
+
+	loadingItems = async () => {
+		try {
+			const allItems = await AsyncStorage.getItem('Todos');
+			this.setState({
+				loadingItems: true,
+				allItems: JSON.parse(allItems) || {}
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	onDoneAddItem = () => {
+		const { inputValue } = this.state;
+		if (inputValue !== '') {
+			this.setState(prevState => {
+				const id = uuid();
+				const newItemObject = {
+					[id]: {
+						id,
+						isCompleted: false,
+						text: inputValue,
+						createdAt: Date.now()
+					}
+				};
+				const newState = {
+					...prevState,
+					inputValue: '',
+					allItems: {
+						...prevState.allItems,
+						...newItemObject
+					}
+				};
+				this.saveItems(newState.allItems);
+				return { ...newState };
+			});
+		}
+	};
+
+	deleteItem = id => {
+		this.setState(prevState => {
+			const allItems = prevState.allItems;
+			delete allItems[id];
+			const newState = {
+				...prevState,
+				...allItems
+			};
+			this.saveItems(newState.allItems);
+			return { ...newState };
+		});
+	};
+
+	completeItem = id => {
+		this.setState(prevState => {
+			const newState = {
+				...prevState,
+				allItems: {
+					...prevState.allItems,
+					[id]: {
+						...prevState.allItems[id],
+						isCompleted: true
+					}
+				}
+			};
+			this.saveItems(newState.allItems);
+			return { ...newState };
+		});
+	};
+
+	incompleteItem = id => {
+		this.setState(prevState => {
+			const newState = {
+				...prevState,
+				allItems: {
+					...prevState.allItems,
+					[id]: {
+						...prevState.allItems[id],
+						isCompleted: false
+					}
+				}
+			};
+			this.saveItems(newState.allItems);
+			return { ...newState };
+		});
+	};
+
+	deleteAllItems = async () => {
+		try {
+			await AsyncStorage.removeItem('Todos');
+			this.setState({ allItems: {} });
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	saveItems = newItem => {
+		const saveItem = AsyncStorage.setItem('Todos', JSON.stringify(newItem));
+	};
 
      displayTasks (tasks) {
           if (tasks && tasks.length > 0) {
@@ -85,21 +201,50 @@ export default class TaskList extends Component {
      }
 
      render (){
-          let tasks = this.state.taskArray.map((key) => {
-               return <Task key={key}
-               deleteMethod={ () => this.deleteTask(key) }
-               saveMethod={ () => this.saveTasks }/>
-          });
+          const { inputValue, loadingItems, allItems} = this.state;
+          const subtitle= "What's Next?  ";
           return (
                <Container style={styles.bg}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                         <Button onPress={ this.addTask.bind(this) } transparent >
-                              <Icon name='add' style={{color: '#E2858D'}}/>
-                         </Button>
+                    <View style = {{flex: 0.2, heigth: 30, marginTop: 20, justifyContent: 'flex-start'}}>
+                         <Text style = {styles.subtitleText}>    {subtitle}</Text>
+
+                              <Input
+                                   style = {styles.input}
+                                   placeholder = "Type here to add note"
+                                   placeholderTextColor = "#c4c4c4"
+                                   autocapitalize ="sentences"
+                                   underlineColorAndroid = "transparent"
+                                   returnKeyType="done"
+                                   multiline = {true}
+                                   blurOnSubmit={true}
+                                   inputValue={inputValue}
+                                   onChangeText={this.newInputValue}
+                                   onSubmitEditing={this.onDoneAddItem}
+                              />
+
+
                     </View>
-                    <Content>
-                    {this.displayTasks(tasks)}
-                    </Content>
+                    <View style = {{flex: -1, heigth: 30, marginTop: 20, justifyContent: 'stretch'}}>
+                         <Text style={styles.subtitleText}>Recent Tasks</Text>
+                    </View>
+                    {loadingItems ? (
+                         <Content>
+                              {Object.values(allItems)
+                                   .reverse()
+                                   .map(item => (
+                                        <Task
+                                             key={item.id}
+                                             {...item}
+                                             deleteItem={this.deleteItem}
+                                             completeItem={this.completeItem}
+                                             incompleteItem={this.incompleteItem}
+                                        />
+                                   ))
+                              }
+                         </Content>
+                    ) : (
+                         <ActivityIndicator size = "large" color = 'black' />
+                    )}
                </Container>
           );
      }
@@ -115,6 +260,7 @@ export default class TaskList extends Component {
           arr.push(newTask);
           this.setState({ currId: this.state.currId+1 });
           this.setState({ taskArray: arr });
+          this.saveTasks();
      }
 
      editTask (key, val){
@@ -133,6 +279,7 @@ export default class TaskList extends Component {
           */
           this.state.taskArray.splice( this.state.taskArray.indexOf(key) , 1);
           this.setState({taskArray: this.state.taskArray});
+          this.saveTasks();
      }
 
      saveTasks = async() => {

@@ -43,4 +43,24 @@ export default StyleSheet.create({
     backgroundColor: '#FBFBFF',
     paddingHorizontal: 20,
   },
+  inputContainer: {
+       marginTop: 40,
+       // paddingLeft: 5
+       // justifyContent: 'stretch'
+  },
+  centered: {
+       alignItems: 'center'
+  },
+  subtitleText: {
+          paddingRight: 20,
+		fontSize: 20,
+		fontWeight: '500'
+	},
+     input: {
+     	paddingTop: 10,
+     	// paddingRight: 15,
+     	fontSize: 34,
+     	color: 'black',
+     	fontWeight: '500'
+     }
 });

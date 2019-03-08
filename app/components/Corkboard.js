@@ -60,21 +60,137 @@ import {
      AsyncStorage
 } from 'react-native';
 import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab } from 'native-base';
-import Memo from './Memo';
+import MemoForm from './MemoForm';
 import styles from './Styles';
+import uuid from 'uuid/v1';
 
 export default class Corkboard extends Component {
      constructor (props){
           super(props);
+          this.doneEditing = this.doneEditing.bind(this)
           this.state = {
-               memoArray: [],
-               currId: 0,
-          };
-     }
+               inputTitle: '',
+     		inputValue: '',
+     		loadingItems: false,
+               addButtonPressed: false,
+               isSaved: false,
+     		allItems: {}
 
-     componentDidMount (){
-          this.getMemos();
-     }
+          }
+	};
+
+	componentDidMount = () => {
+		this.loadingItems();
+	};
+
+	newInputValue = value => {
+		this.setState({
+			inputValue: value
+		});
+	};
+
+	loadingItems = async () => {
+		try {
+			const allItems = await AsyncStorage.getItem('Todos');
+			this.setState({
+				loadingItems: true,
+				allItems: JSON.parse(allItems) || {}
+			});
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	onDoneAddItem = () => {
+		const { inputValue } = this.state;
+		if (inputValue !== '') {
+			this.setState(prevState => {
+				const id = uuid();
+				const newItemObject = {
+					[id]: {
+						id,
+                              title: inputTitle,
+						text: inputValue,
+						createdAt: Date.now()
+					}
+				};
+				const newState = {
+					...prevState,
+					inputValue: '',
+					allItems: {
+						...prevState.allItems,
+						...newItemObject
+					}
+				};
+				this.saveItems(newState.allItems);
+				return { ...newState };
+			});
+		}
+	};
+
+	deleteItem = id => {
+		this.setState(prevState => {
+			const allItems = prevState.allItems;
+			delete allItems[id];
+			const newState = {
+				...prevState,
+				...allItems
+			};
+			this.saveItems(newState.allItems);
+			return { ...newState };
+		});
+	};
+
+	completeItem = id => {
+		this.setState(prevState => {
+			const newState = {
+				...prevState,
+				allItems: {
+					...prevState.allItems,
+					[id]: {
+						...prevState.allItems[id],
+						isCompleted: true
+					}
+				}
+			};
+			this.saveItems(newState.allItems);
+			return { ...newState };
+		});
+	};
+
+	incompleteItem = id => {
+		this.setState(prevState => {
+			const newState = {
+				...prevState,
+				allItems: {
+					...prevState.allItems,
+					[id]: {
+						...prevState.allItems[id],
+						isCompleted: false
+					}
+				}
+			};
+			this.saveItems(newState.allItems);
+			return { ...newState };
+		});
+	};
+
+	deleteAllItems = async () => {
+		try {
+			await AsyncStorage.removeItem('Todos');
+			this.setState({ allItems: {} });
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
+	saveItems = newItem => {
+		const saveItem = AsyncStorage.setItem('Todos', JSON.stringify(newItem));
+	};
+
+     // componentDidMount (){
+     //      this.getMemos();
+     // }
 
      displayMemos (memos) {
           if (memos && memos.length > 0) {
@@ -90,22 +206,44 @@ export default class Corkboard extends Component {
           }
      }
 
-     render (){
-          let memos = this.state.memoArray.map((num) => {
-               return <Memo key={num}
-               deleteMethod={ () => this.deleteMemo(num) }
-               saveMethod={ () => this.saveMemos }/>
-          });
+     doneEditing() {
+          this.setState({addButtonPressed: !this.state.addButtonPressed})
+     }
 
+
+
+     render (){
+          // let memos = this.state.memoArray.map((num) => {
+          //      return <Memo key={num}
+          //      deleteMethod={ () => this.deleteMemo(num) }
+          //      saveMethod={ () => this.saveMemos }/>
+          // });
+          const {inputTitle, inputValue, loadingItems, allItems, addButtonPressed} = this.state;
           return (
+
+
                <Container style={styles.bg}>
                     <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                         <Button onPress={ this.addMemo.bind(this) } transparent >
-                              <Icon name='add' style={{color: '#E2858D'}}/>
-                         </Button>
+                         {addButtonPressed ? (
+                              <Button light onPressOut={()=>this.setState({addButtonPressed:false})}>
+                                   <Text>Done</Text>
+                              </Button>
+                         ): (
+                              <Button onPress={()=>this.setState({addButtonPressed:true})} transparent >
+                                  <Icon name='add' style={{color: '#E2858D'}}/>
+                             </Button>
+                         )}
                     </View>
                     <Content>
-                    {this.displayMemos(memos)}
+                         {addButtonPressed ? (
+                              <MemoForm
+                                   title=''
+                                   text=''
+                                   onDoneAddItem={this.onDoneAddItem}
+                                   addButtonPressed={this.addButtonPressed}
+                                   doneEditing={this.doneEditing}
+                                   isSaved={this.isSaved}/>
+                         ): (<View/>)}
                     </Content>
                </Container>
           );

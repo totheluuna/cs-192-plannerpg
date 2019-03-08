@@ -65,31 +65,48 @@ export default class Task extends React.Component {
           this.state = {
                taskText: "",
           };
+
      }
 
+     onToggle = () => {
+		const { isCompleted, id, completeItem, incompleteItem } = this.props;
+		if (isCompleted) {
+			incompleteItem(id);
+		} else {
+			completeItem(id);
+		}
+          this.setState({checked: !this.state.checked})
+	};
+
      render (){
+          const { text, deleteItem, id, isCompleted } = this.props;
+
           return (
-               <View >
+               <View>
                     <Card flexDirection='row' style={ styles.card }>
                          <CardItem style={{flex: 1}}>
                               <CheckBox
-                              checked={this.state.checked}
-                              onPress={() => this.setState({checked: !this.state.checked})}
+                                   checked={this.state.checked}
+                                   onPress={this.onToggle}
                               />
                          </CardItem>
                          <CardItem style={{flex: 7}}>
                               <View style={{backgroundColor: 'rgba(0,0,0,0)'}}>
-                                   <TextInput
-                                   multiline = {true}
-                                   placeholder='Task'
-                                   value={this.state.taskText}
-                                   onChangeText={(text) => this.setState({taskText: text})}
-                                   />
+                                   <Text
+                                        style={[
+                                             isCompleted ?
+                                                  {
+                                                       color: '#c4c4cc',
+                                                       textDecorationLine: 'line-through'
+                                                  } : {color: '#555555'}
+                                        ]}>
+                                        {text}
+                                   </Text>
                               </View>
                          </CardItem>
                          <CardItem style={{flex: 1}}>
-                              <TouchableOpacity button onPress={this.props.deleteMethod} >
-                                   <Icon name='close' style={{color: '#000'}}/>
+                              <TouchableOpacity button onPressOut={() => deleteItem(id)} >
+                                   <Icon name='trash' style={{color: '#000'}}/>
                               </TouchableOpacity>
                          </CardItem>
                     </Card>
