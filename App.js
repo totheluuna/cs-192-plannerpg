@@ -71,6 +71,7 @@ import Calendar from './app/components/Calendar';
 import Corkboard from './app/components/Corkboard';
 import TaskList from './app/components/TaskList';
 import EditSchedule from './app/components/EditSchedule';
+import ViewProgress from './app/components/ViewProgress';
 
 import styles from './app/components/Styles';
 
@@ -92,6 +93,7 @@ const CalendarNavigator = createStackNavigator(
 
 const AppTabNavigator = createMaterialTopTabNavigator(
      {
+          Progress: ViewProgress,
           Calendar: CalendarNavigator,
           Corkboard: Corkboard,
           "Task List": TaskList,
