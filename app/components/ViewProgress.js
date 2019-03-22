@@ -1,6 +1,6 @@
 /*
 * MIT License
-* Copyright (c) 2019 Angelo Vincent R. Delos Santos, Rheeca S. Guion
+* Copyright (c) 2019 Datuluna Ali Dilangalen
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
@@ -23,14 +23,16 @@
 */
 
 /*
-* File creation date: Feb. 16, 2019
+* File creation date: March 22, 2019
 * Development group:
 * Client group:
 * Purpose: Display user progress
 * Variables:
-*   username - string of the users' name
-*   HP
-*   points
+*      hp
+*      max_hp
+*      name
+*      exp
+*      expToLevel
 */
 
 import React, { Component } from 'react';
@@ -147,11 +149,11 @@ export default class ViewProgress extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'space-evenly',
-    padding: 10,
-  },
+     container: {
+          flex: 1,
+          justifyContent: 'space-evenly',
+          padding: 10,
+},
 
 
 });
