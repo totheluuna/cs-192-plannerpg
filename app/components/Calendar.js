@@ -31,6 +31,11 @@
 *                        - saving of dates in the state (datesWithSchedules, the
 *                          functions hasDate, getDate)
 *
+* 03/22/19 - Rheeca Guion - added FlatList for the grid view of calendar
+*                        - added editSchedule, updateSchedule, renderCell,
+*                          renderWeekCell
+*                        - fixed deleteSchedule error: now deletes the correct schedule
+*                          but the fix is not yet reflected until updateSchedule is fixed
 */
 
 /*
@@ -71,7 +76,7 @@ import moment from "moment";
 import Schedule from './Schedule';
 import styles from './Styles';
 
-export default class Calendar extends Component {
+export default class Calendar extends React.Component {
      constructor(props) {
           super(props);
           this.state={
@@ -88,8 +93,8 @@ export default class Calendar extends Component {
           * Creation date: Mar. 5, 2019
           * Purpose: Returns true if an array is empty
           */
-          for (let key in obj) {
-               if(obj.hasOwnProperty(key)) {
+          for (let obj in arr) {
+               if(arr.hasOwnProperty(obj)) {
                     return false;
                }
           }
@@ -111,7 +116,7 @@ export default class Calendar extends Component {
           return false;
      }
 
-     getDate (date) {
+     getDate (date){
           /*
           * getDate
           * Creation date: Mar. 5, 2019
@@ -128,6 +133,16 @@ export default class Calendar extends Component {
           return currDate;
      }
 
+     findObjectById (array, id){
+          let object = null;
+          array.map((obj) => {
+               if (obj.id == id) {
+                    object = obj;
+               }
+          });
+          return object;
+     }
+
      displaySchedules (date){
           /*
           * displaySchedules
@@ -136,14 +151,14 @@ export default class Calendar extends Component {
           *          selectedDate
           */
           if (this.hasDate(date)) {
-               currDate = this.getDate (date);
+               let currDate = this.getDate(date);
                let schedules = currDate.schedulesArray.map((scheduleItem) => {
                     return <Schedule
-                         key={scheduleItem.key}
+                         id={scheduleItem.id}
                          title={scheduleItem.title}
                          start={scheduleItem.start}
                          end={scheduleItem.end}
-                         deleteMethod={ () => this.deleteSchedule(scheduleItem.key) }
+                         editMethod={ () => this.editSchedule(scheduleItem.id) }
                     />;
                });
                return schedules;
@@ -175,6 +190,19 @@ export default class Calendar extends Component {
           );
      }
 
+     renderWeekCell = ({ item, index }) => {
+          if (item.empty === true) {
+               return <View style={[styles.item, styles.itemInvisible]} />;
+          }
+          return (
+               <View
+                    style={styles.weekCell}
+               >
+                    <Text >{item.name}</Text>
+               </View>
+          );
+     };
+
      renderWeek (){
           /*
           * renderWeek
@@ -189,20 +217,29 @@ export default class Calendar extends Component {
           for (let i = 0; i < 7; i++) {
                let temp = moment(startDate).add(i, 'days');
                days.push (
-                    <Text>
-                         {moment(temp).format(dateFormat)}
-                    </Text>
+                    {name: moment(temp).format(dateFormat)}
                );
           }
 
           return (
-               <View>
-                    <Text>
-                         {days}
-                    </Text>
-               </View>
+               <FlatList
+                    data={days}
+                    renderItem={this.renderWeekCell}
+                    numColumns={7}
+               />
           );
      }
+
+     renderCell = ({ item, index }) => {
+          if (item.empty === true) {
+               return <View style={[styles.item, styles.itemInvisible]} />;
+          }
+          return (
+               <View style={styles.cell}>
+                    <Text >{item.day}</Text>
+               </View>
+          );
+     };
 
      renderDays (){
           /*
@@ -224,30 +261,20 @@ export default class Calendar extends Component {
           let formattedDate = "";
 
           while (day <= endDate) {
-               for (let i = 0; i < 7; i++) {
-                    formattedDate = moment(day).format(dateFormat);
-                    const cloneDay = day;
-                    days.push(
-                         <Text>
-                              {formattedDate}
-                         </Text>
-                    );
-                    day = moment(day).add(1, 'days');
-               }
-               rows.push(
-                    <Text>
-                         {days}
-                    </Text>
+               formattedDate = moment(day).format(dateFormat);
+               const cloneDay = day;
+               days.push(
+                    {day: formattedDate}
                );
-               days = [];
+               day = moment(day).add(1, 'days');
           }
 
           return (
-               <View>
-                    <Text>
-                         {rows}
-                    </Text>
-               </View>
+               <FlatList
+                    data={days}
+                    renderItem={this.renderCell}
+                    numColumns={7}
+               />
           );
      }
 
@@ -272,7 +299,7 @@ export default class Calendar extends Component {
      render (){
           return (
                <Container>
-                    <View>
+                    <View style={{paddingHorizontal: 50}}>
                          {this.renderHeader()}
                          {this.renderWeek()}
                          {this.renderDays()}
@@ -301,12 +328,12 @@ export default class Calendar extends Component {
                // Add schedules to date
                let currDate = this.getDate(this.state.selectedDate);
                let newSchedule = {
-                    key: currDate.currId,
+                    id: this.state.currId,
                     title: "",
                     start: "",
                     end: "",
                };
-               currDate.currId = currDate.currId + 1;
+               this.state.currId += 1;
                currDate.schedulesArray.push(newSchedule);
 
                let arr = this.state.datesWithSchedules;
@@ -322,28 +349,63 @@ export default class Calendar extends Component {
                let newDateWithSched = {
                     date: this.state.selectedDate,
                     schedulesArray: [],
-                    currId: 1,
                };
                newDateWithSched.schedulesArray.push({
-                    key: 0,
+                    id: this.state.currId,
                     title: "",
                     start: "",
                     end: "",
                });
+               this.state.currId += 1;
                let arr = this.state.datesWithSchedules;
                arr.push(newDateWithSched);
                this.setState({ datesWithSchedules: arr });
           }
      }
 
-     deleteSchedule (key){
+     editSchedule (id){
+          /*
+          * editSchedule
+          * Creation date: Mar. 21, 2019
+          * Purpose: Navigates to EditSchedule screen where schedule is edited
+          */
+          let currDate = this.getDate(this.state.selectedDate);
+          let schedule = this.findObjectById(currDate.schedulesArray, id);
+          if (schedule) {
+               this.props.navigation.navigate('EditSchedule',
+               {
+                    id: id,
+                    title: schedule.title,
+                    start: schedule.start,
+                    end: schedule.end,
+                    onUpdate: (id, title) => this.updateSchedule.bind(this),
+                    onDelete: (id) => this.deleteSchedule.bind(this)
+               });
+          }
+     }
+
+     updateSchedule (id, title){
+          /*
+          * updateSchedule
+          * Creation date: Mar. 21, 2019
+          * Purpose: Updates the schedule in the state
+          */
+          let currDate = this.getDate(this.state.selectedDate);
+          let schedule = this.findObjectById(currDate.schedulesArray, id);
+          schedule.title = title;
+     }
+
+     deleteSchedule (id){
           /*
           * deleteSchedule
           * Creation date: Mar. 5, 2019
           * Purpose: Deletes a schedule
           */
           let currDate = this.getDate(this.state.selectedDate);
-          currDate.schedulesArray.splice( currDate.schedulesArray.indexOf(key) , 1);
+          let objectToDelete = this.findObjectById(currDate.schedulesArray, id);
+          if (objectToDelete) {
+               currDate.schedulesArray.splice( currDate.schedulesArray.indexOf(objectToDelete), 1);
+          }
 
           let arr = this.state.datesWithSchedules;
           let arr2 = arr.map((dateItem) => {

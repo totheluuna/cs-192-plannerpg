@@ -76,7 +76,6 @@ export default class Schedule extends React.Component {
      constructor (props){
           super(props);
           this.state = {
-               scheduleId: props.key,
                scheduleTitle: props.title,
                scheduleStart: props.start,
                scheduleEnd: props.end,
@@ -84,31 +83,31 @@ export default class Schedule extends React.Component {
      }
 
      render (){
+          let title = this.state.scheduleTitle;
+          if (title == "") {
+               title = "Title";
+          }
+          let start = this.state.scheduleStart;
+          if (start == "") {
+               start = "Start";
+          }
+          let end = this.state.scheduleEnd;
+          if (end == "") {
+               end = "End";
+          }
           return (
                <ListItem key={this.state.scheduleId}>
-                    <Header>
-                         <TextInput
-                              multiline = {true}
-                              placeholder='Schedule'
-                              value={this.state.scheduleTitle}
-                              onChangeText={(text) => this.setState({scheduleTitle: text})}/>
-                    </Header>
-                    <Body>
-                         <TextInput
-                              placeholder='Start'
-                              value={this.state.scheduleStart}
-                              onChangeText={(text) => this.setState({scheduleStart: text})}/>
-                         <TextInput
-                              placeholder='End'
-                              value={this.state.scheduleEnd}
-                              onChangeText={(text) => this.setState({scheduleEnd: text})}/>
-                    </Body>
-                    <Footer>
-                         <TouchableOpacity button transparent onPress={this.props.deleteMethod}>
-                              <Icon name='trash' style={{color: '#000'}}/>
-                         </TouchableOpacity>
-                    </Footer>
+                    <TouchableOpacity button transparent onPress={this.props.editMethod}>
+                         <Header>
+                              <Text>{title}</Text>
+                         </Header>
+                         <Body>
+                              <Text>{start}</Text>
+                              <Text>{end}</Text>
+                         </Body>
+                    </TouchableOpacity>
                </ListItem>
+
           )
      }
 }

@@ -32,6 +32,9 @@
 
 * 2/07/19 - Datuluna Dilangalen - Added UI
 * 2/20/19 - Rheeca Guion - Added tab navigation, styles
+* 3/22/19 - Rheeca Guion - Replaced tab navigation with React Navigation:
+*                            Added AppContainer, StackNavigator, and
+*                            MaterialTopTabNavigator for navigation
 */
 
 /*
@@ -49,6 +52,7 @@
 import React, { Component } from 'react';
 import {
      View,
+     Button,
 } from 'react-native';
 import {
      Container,
@@ -59,42 +63,64 @@ import {
      Text,
      StyleProvider
 } from 'native-base';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createAppContainer, createMaterialTopTabNavigator } from 'react-navigation';
 import getTheme from './native-base-theme/components';
 import variable from './native-base-theme/variables/variable';
 import { Font, AppLoading } from 'expo';
 import Calendar from './app/components/Calendar';
 import Corkboard from './app/components/Corkboard';
 import TaskList from './app/components/TaskList';
+import EditSchedule from './app/components/EditSchedule';
 
 import styles from './app/components/Styles';
 
-class Home extends React.Component {
-     render() {
-          return (
-               <StyleProvider style={getTheme(variable)}>
-                    <Container style={{ backgroundColor: '#FBFBFF' }}>
-                         <Header/>
-                         <Tabs tabBarUnderlineStyle={{ }} >
-                              <Tab heading="Calendar" tabStyle={{ backgroundColor: 'transparent' }} textStyle={{color: '#445C70'}} activeTabStyle={{backgroundColor: 'transparent'}} activeTextStyle={{color: '#445C70'}}>
-                                   <Calendar />
-                              </Tab>
-                              <Tab heading="Corkboard" tabStyle={{ backgroundColor: 'transparent' }} textStyle={{color: '#445C70'}} activeTabStyle={{backgroundColor: 'transparent'}} activeTextStyle={{color: '#445C70'}}>
-                                   <Corkboard />
-                              </Tab>
-                              <Tab heading="Task List" tabStyle={{ backgroundColor: 'transparent' }} textStyle={{color: '#445C70'}} activeTabStyle={{backgroundColor: 'transparent'}} activeTextStyle={{color: '#445C70'}}>
-                                   <TaskList />
-                              </Tab>
-                         </Tabs>
-                    </Container>
-               </StyleProvider>
-          );
-     }
-}
+const CalendarNavigator = createStackNavigator(
 
-const MainNavigator = createStackNavigator({
-     Home: { screen: Home },
-});
+     {
+          Calendar: Calendar,
+          EditSchedule: EditSchedule,
+     },
+     {
+          initialRouteName: "Calendar"
+     },
+     {
+          navigationOptions: {
+               header: null,
+          },
+     }
+);
+
+const AppTabNavigator = createMaterialTopTabNavigator(
+     {
+          Calendar: CalendarNavigator,
+          Corkboard: Corkboard,
+          "Task List": TaskList,
+     },
+     {
+          tabBarOptions: {
+               style: {
+                    backgroundColor: 'white',
+               },
+               labelStyle: {
+                    color: 'black',
+               },
+          }
+     },
+);
+
+const MainNavigator = createStackNavigator(
+     {
+          HomeTabs: AppTabNavigator
+     },
+     {
+          headerMode: 'none',
+          navigationOptions: {
+               header: null,
+          },
+     }
+);
+
+const AppContainer = createAppContainer(MainNavigator);
 
 export default class App extends React.Component {
      constructor() {
@@ -125,7 +151,7 @@ export default class App extends React.Component {
           }
 
           return (
-               <Home />
+               <AppContainer />
           );
      }
 }

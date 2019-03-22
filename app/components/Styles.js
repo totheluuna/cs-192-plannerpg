@@ -25,6 +25,7 @@
 /*
  * Code History
  * 2/22/19 - Rheeca Guion - Added bg
+ * 3/21/19 - Rheeca Guion - Added editSchedule, cell, weekCell
 */
 
 /*
@@ -36,11 +37,30 @@
  */
 
 import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
-  bg: {
-    backgroundColor: '#FBFBFF',
-    paddingHorizontal: 20,
-  },
+     bg: {
+          backgroundColor: '#FBFBFF',
+          paddingHorizontal: 20,
+     },
+     editSchedule: {
+          margin: 20,
+     },
+     cell: {
+          backgroundColor: '#C1FFF0',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          margin: 1,
+          height: Dimensions.get('window').width / 9,
+     },
+     weekCell: {
+          backgroundColor: '#FBFBFF',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          margin: 1,
+          height: Dimensions.get('window').width / 9,
+     }
 });
