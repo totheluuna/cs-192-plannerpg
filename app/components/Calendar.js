@@ -36,6 +36,10 @@
 *                          renderWeekCell
 *                        - fixed deleteSchedule error: now deletes the correct schedule
 *                          but the fix is not yet reflected until updateSchedule is fixed
+* 03/27/19 - Rheeca Guion - created the findObjectById function, fixed the functions
+*                           editSchedule, updateSchedule so schedules can be updated
+* 04/01/19 - Rheeca Guion - fixed saveSchedules and getSchedules so data can be stored in
+*                           AsyncStorage
 */
 
 /*
@@ -47,7 +51,7 @@
 *   currentMonth; the current month to display
 *   selectedDate; the selected date
 *   datesWithSchedules; array in state that saves dates with schedules
-*   currId; id assigned to a new schedule
+*   schedCurrId; id assigned to a new schedule
 *   arr; temporary array for editing arrays from state
 *   currDate; date object from the datesWithSchedules array that matches selectedDate
 */
@@ -83,8 +87,12 @@ export default class Calendar extends React.Component {
                currentMonth: new Date(),
                selectedDate: new Date(),
                datesWithSchedules: [],
-               currId: 0,
+               schedCurrId: 0,
           };
+     }
+
+     componentDidMount (){
+          this.getSchedules();
      }
 
      isEmpty (obj) {
@@ -134,6 +142,11 @@ export default class Calendar extends React.Component {
      }
 
      findObjectById (array, id){
+          /*
+          * findObjectById
+          * Creation date: Mar. 27, 2019
+          * Purpose: Find an object in array given its id
+          */
           let object = null;
           array.map((obj) => {
                if (obj.id == id) {
@@ -328,12 +341,11 @@ export default class Calendar extends React.Component {
                // Add schedules to date
                let currDate = this.getDate(this.state.selectedDate);
                let newSchedule = {
-                    id: this.state.currId,
+                    id: this.state.schedCurrId,
                     title: "",
                     start: "",
                     end: "",
                };
-               this.state.currId += 1;
                currDate.schedulesArray.push(newSchedule);
 
                let arr = this.state.datesWithSchedules;
@@ -343,6 +355,7 @@ export default class Calendar extends React.Component {
                     }
                     return dateItem;
                });
+               this.setState({ schedCurrId: this.state.schedCurrId + 1 });
                this.setState({ datesWithSchedules: arr2 });
           } else {
                // Add new date item to datesWithSchedules
@@ -351,12 +364,12 @@ export default class Calendar extends React.Component {
                     schedulesArray: [],
                };
                newDateWithSched.schedulesArray.push({
-                    id: this.state.currId,
+                    id: this.state.schedCurrId,
                     title: "",
                     start: "",
                     end: "",
                });
-               this.state.currId += 1;
+               this.state.schedCurrId += 1;
                let arr = this.state.datesWithSchedules;
                arr.push(newDateWithSched);
                this.setState({ datesWithSchedules: arr });
@@ -378,13 +391,13 @@ export default class Calendar extends React.Component {
                     title: schedule.title,
                     start: schedule.start,
                     end: schedule.end,
-                    onUpdate: (id, title) => this.updateSchedule.bind(this),
-                    onDelete: (id) => this.deleteSchedule.bind(this)
+                    onUpdate: this.updateSchedule.bind(this),
+                    onDelete: this.deleteSchedule.bind(this)
                });
           }
      }
 
-     updateSchedule (id, title){
+     updateSchedule (id, title, start, end) {
           /*
           * updateSchedule
           * Creation date: Mar. 21, 2019
@@ -393,9 +406,70 @@ export default class Calendar extends React.Component {
           let currDate = this.getDate(this.state.selectedDate);
           let schedule = this.findObjectById(currDate.schedulesArray, id);
           schedule.title = title;
+          schedule.start = start;
+          schedule.end = end;
+
+          let arr = this.state.datesWithSchedules;
+          let arr2 = arr.map((dateItem) => {
+               if (moment(dateItem.date).isSame(currDate.date, 'day')) {
+                    dateItem.schedulesArray.map((schedItem) => {
+                         if(schedItem.id == id) {
+                              schedItem = schedule;
+                         }
+                         return schedItem;
+                    });
+               }
+               return dateItem;
+          });
+          this.setState({ datesWithSchedules: arr2 });
+          this.saveSchedules();
      }
 
-     deleteSchedule (id){
+     saveSchedules = async() => {
+          /*
+           * saveSchedules
+           * Creation date: Apr. 1, 2019
+           * Purpose: Save schedules in AsyncStorage
+           */
+          try {
+               await AsyncStorage.setItem('datesWithSchedules', JSON.stringify(this.state.datesWithSchedules));
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               await AsyncStorage.setItem('schedCurrId', JSON.stringify(this.state.schedCurrId));
+          } catch (error) {
+               alert(error);
+          }
+     }
+
+     getSchedules = async () => {
+          /*
+           * getSchedules
+           * Creation date: Apr. 1, 2019
+           * Purpose: Get saved schedules from AsyncStorage
+           */
+          try {
+               let temp = await AsyncStorage.getItem('datesWithSchedules');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({datesWithSchedules: parsed})
+               }
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               let temp = await AsyncStorage.getItem('schedCurrId');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({schedCurrId: parsed})
+               }
+          } catch (error) {
+               alert(error);
+          }
+     };
+
+     deleteSchedule (id) {
           /*
           * deleteSchedule
           * Creation date: Mar. 5, 2019

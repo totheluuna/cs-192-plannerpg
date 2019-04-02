@@ -31,6 +31,8 @@
  * Code History
 
  * 03/05/19 - Rheeca Guion - created file
+ * 03/27/19 - Rheeca Guion - removed textinputs to make component editable only in 
+ *                           EditSchedule
  */
 
 /*
@@ -41,9 +43,9 @@
  * Purpose: Defines the individual instance of a schedule
 
  * Variables:
- *   scheduleTitle: contains schedule title
- *   scheduleStart: contains start time of schedule
- *   scheduleEnd: contains end time of schedule
+ *   title: contains schedule title
+ *   start: contains start time of schedule
+ *   end: contains end time of schedule
  */
 
 import React from 'react';
@@ -54,7 +56,6 @@ import {
      TouchableWithoutFeedback,
      Keyboard,
      StyleSheet,
-     AsyncStorage,
 } from 'react-native';
 
 import {
@@ -75,28 +76,23 @@ import {
 export default class Schedule extends React.Component {
      constructor (props){
           super(props);
-          this.state = {
-               scheduleTitle: props.title,
-               scheduleStart: props.start,
-               scheduleEnd: props.end,
-          };
      }
 
      render (){
-          let title = this.state.scheduleTitle;
+          let title = this.props.title;
           if (title == "") {
                title = "Title";
           }
-          let start = this.state.scheduleStart;
+          let start = this.props.start;
           if (start == "") {
                start = "Start";
           }
-          let end = this.state.scheduleEnd;
+          let end = this.props.end;
           if (end == "") {
                end = "End";
           }
           return (
-               <ListItem key={this.state.scheduleId}>
+               <ListItem key={this.props.id}>
                     <TouchableOpacity button transparent onPress={this.props.editMethod}>
                          <Header>
                               <Text>{title}</Text>

@@ -35,6 +35,7 @@
 * 3/22/19 - Rheeca Guion - Replaced tab navigation with React Navigation:
 *                            Added AppContainer, StackNavigator, and
 *                            MaterialTopTabNavigator for navigation
+* 4/01/19 - Rheeca Guion - Added StackNavigators for Corkboard and TaskList
 */
 
 /*
@@ -42,7 +43,7 @@
 * Development group:
 * Client group:
 
-* Purpose: Index of the app. Contains navigation for Corkboard
+* Purpose: Index of the app. Contains navigation for Progress, Calendar, Corkboard
 *   and Tasklist
 
 * Variables:
@@ -51,15 +52,12 @@
 
 import React, { Component } from 'react';
 import {
+     AsyncStorage,
      View,
      Button,
 } from 'react-native';
 import {
      Container,
-     Header,
-     Tab,
-     Tabs,
-     ScrollableTab,
      Text,
      StyleProvider
 } from 'native-base';
@@ -71,6 +69,8 @@ import Calendar from './app/components/Calendar';
 import Corkboard from './app/components/Corkboard';
 import TaskList from './app/components/TaskList';
 import EditSchedule from './app/components/EditSchedule';
+import EditMemo from './app/components/EditMemo';
+import EditTask from './app/components/EditTask';
 import ViewProgress from './app/components/ViewProgress';
 
 import styles from './app/components/Styles';
@@ -91,12 +91,44 @@ const CalendarNavigator = createStackNavigator(
      }
 );
 
+const CorkboardNavigator = createStackNavigator(
+
+     {
+          Corkboard: Corkboard,
+          EditMemo: EditMemo,
+     },
+     {
+          initialRouteName: "Corkboard"
+     },
+     {
+          navigationOptions: {
+               header: null,
+          },
+     }
+);
+
+const TaskListNavigator = createStackNavigator(
+
+     {
+          TaskList: TaskList,
+          EditTask: EditTask,
+     },
+     {
+          initialRouteName: "TaskList"
+     },
+     {
+          navigationOptions: {
+               header: null,
+          },
+     }
+);
+
 const AppTabNavigator = createMaterialTopTabNavigator(
      {
           Progress: ViewProgress,
           Calendar: CalendarNavigator,
-          Corkboard: Corkboard,
-          "Task List": TaskList,
+          Corkboard: CorkboardNavigator,
+          "Task List": TaskListNavigator,
      },
      {
           tabBarOptions: {
@@ -147,13 +179,21 @@ export default class App extends React.Component {
           this.setState({ isReady: true });
      }
 
+     clearAsyncStorage = async() => {
+          AsyncStorage.clear();
+          alert("Cleared Storage");
+     }
+
      render() {
           if (!this.state.isReady) {
                return <Expo.AppLoading />;
           }
 
           return (
-               <AppContainer />
+               <Container>
+                    <AppContainer />
+                    <Button title="Clear Async Storage" onPress={this.clearAsyncStorage} />
+               </Container>
           );
      }
 }

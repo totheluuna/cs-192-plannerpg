@@ -30,10 +30,12 @@
 /*
  * Code History
 
- * 2/7/19 - Datuluna Dilangalen - Added UI
- * 2/7/19 - Rheeca Guion - Added constructor, props, TextInput, and the functions
+ * 2/07/19 - Datuluna Dilangalen - Added UI
+ * 2/07/19 - Rheeca Guion - Added constructor, props, TextInput, and the functions
  *          called on button presses
- * 2/8/19 - Rheeca Guion - add comments, cleanup
+ * 2/08/19 - Rheeca Guion - add comments, cleanup
+ * 4/01/19 - Rheeca Guion - removed textinputs to make component editable only in
+ *                          EditMemo, removed state
  */
 
 /*
@@ -44,8 +46,8 @@
  * Purpose: Defines the individual instance of a memo
 
  * Variables:
- *   memoTitle: contains memo title
- *   memoText: contains memo text
+ *   title: contains memo title
+ *   text: contains memo text
  */
 
 import React from 'react';
@@ -64,40 +66,29 @@ import {Container, Header, Content, Card, CardItem, Text, Body, Left, Right, But
 export default class Memo extends React.Component {
      constructor (props){
           super(props);
-          this.state = {
-               memoId: 0,
-               memoTitle: "",
-               memoText: "",
-          };
      }
 
      render (){
+          let title = this.props.title;
+          if (title == "") {
+               title = "Title";
+          }
+          let text = this.props.text;
+          if (text == "") {
+               text = "Memo";
+          }
           return (
-               <Card key={this.state.memoId}>
-                    <CardItem header >
-                    <TextInput
-                         multiline = {true}
-                         placeholder='Title'
-                         value={this.state.memoTitle}
-                         onChangeText={(text) => this.setState({memoTitle: text})}/>
-                    </CardItem>
-                    <CardItem>
-                         <Body>
-                              <TextInput
-                                   multiline = {true}
-                                   placeholder='Memo'
-                                   value={this.state.memoText}
-                                   onChangeText={(text) => this.setState({memoText: text})}/>
-                         </Body>
-                    </CardItem>
-                    <CardItem>
-                         <TouchableOpacity button transparent onPress={this.props.saveMethod}>
-                              <Icon name='heart-empty' style={{color: '#000'}}/>
-                         </TouchableOpacity>
-                         <TouchableOpacity button transparent onPress={this.props.deleteMethod}>
-                              <Icon name='trash' style={{color: '#000'}}/>
-                         </TouchableOpacity>
-                    </CardItem>
+               <Card key={this.props.id}>
+                    <TouchableOpacity button transparent onPress={this.props.editMethod}>
+                         <CardItem header >
+                              <Text>{title}</Text>
+                         </CardItem>
+                         <CardItem>
+                              <Body>
+                                   <Text>{text}</Text>
+                              </Body>
+                         </CardItem>
+                    </TouchableOpacity>
                </Card>
           )
      }

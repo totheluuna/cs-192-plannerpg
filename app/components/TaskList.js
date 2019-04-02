@@ -28,6 +28,12 @@
 deleteTask, saveTasks, getTasks, functions called on button presses,
 tasks array to display, tasks
 * 2/22/19 - Rheeca Guion - Added UI, styles
+* 4/01/19 - Rheeca Guion - added the findObjectById and tickCheckBox functions, created
+*                           the functions editTask, updateTask so tasks can be updated
+*                        - had taskArray hold all the task details, changed addTask and
+*                            deleteTask to account for this
+*                        - fixed saveTasks and getTasks so data can be stored in
+*                           AsyncStorage
 */
 
 /*
@@ -42,7 +48,7 @@ tasks array to display, tasks
 *   num; unique key to identify tasks
 *   newTask; holds new task to be pushed into taskArray
 *   arr; temporary array for editing taskArray
-*   currId; id assigned to a new task
+*   taskCurrId; id assigned to a new task
 */
 
 import React, { Component } from 'react';
@@ -70,12 +76,22 @@ export default class TaskList extends Component {
           super(props);
           this.state = {
                taskArray: [],
-               currId: 0,
+               taskCurrId: 0,
           };
      }
 
      componentDidMount (){
           this.getTasks();
+     }
+
+     findObjectById (array, id){
+          let object = null;
+          array.map((obj) => {
+               if (obj.id == id) {
+                    object = obj;
+               }
+          });
+          return object;
      }
 
      displayTasks (tasks) {
@@ -93,10 +109,14 @@ export default class TaskList extends Component {
      }
 
      render (){
-          let tasks = this.state.taskArray.map((key) => {
-               return <Task key={key}
-               deleteMethod={ () => this.deleteTask(key) }
-               saveMethod={ () => this.saveTasks }/>
+          let tasks = this.state.taskArray.map((taskItem) => {
+               return <Task
+                    id={taskItem.id}
+                    isChecked={taskItem.isChecked}
+                    text={taskItem.text}
+                    tickMethod={ () => this.tickCheckBox(taskItem.id) }
+                    editMethod={ () => this.editTask(taskItem.id) }
+               />
           });
           return (
                <Container style={styles.bg}>
@@ -106,10 +126,22 @@ export default class TaskList extends Component {
                          </Button>
                     </View>
                     <Content>
-                    {this.displayTasks(tasks)}
+                         {this.displayTasks(tasks)}
                     </Content>
                </Container>
           );
+     }
+
+     tickCheckBox (id){
+          let arr = this.state.taskArray;
+          let newArr = arr.map((taskItem) => {
+               if(taskItem.id == id) {
+                    taskItem.isChecked = !(taskItem.isChecked);
+               }
+               return taskItem;
+          });
+          this.setState({ taskArray: newArr });
+          this.saveTasks();
      }
 
      addTask (){
@@ -118,29 +150,52 @@ export default class TaskList extends Component {
           * Creation date: Feb. 16, 2019
           * Purpose: Adds a new blank task
           */
-          let newTask = this.state.currId;
+          let newTask = {
+               id: this.state.taskCurrId,
+               isChecked: false,
+               text: "",
+          };
+
           let arr = this.state.taskArray;
           arr.push(newTask);
-          this.setState({ currId: this.state.currId+1 });
+          this.setState({ taskCurrId: this.state.taskCurrId + 1 });
           this.setState({ taskArray: arr });
      }
 
-     editTask (key, val){
+     editTask (id){
           /*
           * editTask
-          * Creation date: Feb. 16, 2019
+          * Creation date: Apr. 1, 2019
           * Purpose: Edits a task
           */
+          let task = this.findObjectById(this.state.taskArray, id);
+          if (task) {
+               this.props.navigation.navigate('EditTask', {
+                    id: id,
+                    isChecked: task.isChecked,
+                    text: task.text,
+                    onUpdate: this.updateTask.bind(this),
+                    onDelete: this.deleteTask.bind(this)
+               });
+          }
      }
 
-     deleteTask (key){
+     updateTask (id, isChecked, text) {
           /*
-          * deleteTask
-          * Creation date: Feb. 16, 2019
-          * Purpose: Deletes a task
+          * updateTask
+          * Creation date: Apr. 1, 2019
+          * Purpose: Updates the task in the state
           */
-          this.state.taskArray.splice( this.state.taskArray.indexOf(key) , 1);
-          this.setState({taskArray: this.state.taskArray});
+          let arr = this.state.taskArray;
+          let newArr = arr.map((taskItem) => {
+               if(taskItem.id == id) {
+                    taskItem.isChecked = isChecked;
+                    taskItem.text = text;
+               }
+               return taskItem;
+          });
+          this.setState({ taskArray: newArr });
+          this.saveTasks();
      }
 
      saveTasks = async() => {
@@ -151,7 +206,11 @@ export default class TaskList extends Component {
           */
           try {
                await AsyncStorage.setItem('taskArray', JSON.stringify(this.state.taskArray));
-               alert("Saved!");
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               await AsyncStorage.setItem('taskCurrId', JSON.stringify(this.state.taskCurrId));
           } catch (error) {
                alert(error);
           }
@@ -169,9 +228,31 @@ export default class TaskList extends Component {
                if(parsed) {
                     this.setState({taskArray: parsed})
                }
-               //alert(parsed);
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               let temp = await AsyncStorage.getItem('taskCurrId');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({taskCurrId: parsed})
+               }
           } catch (error) {
                alert(error);
           }
      };
+
+     deleteTask (id){
+          /*
+          * deleteTask
+          * Creation date: Feb. 16, 2019
+          * Purpose: Deletes a task
+          */
+          let task = this.findObjectById(this.state.taskArray, id);
+          if (task){
+               let arr = this.state.taskArray;
+               arr.splice(arr.indexOf(task), 1);
+               this.setState({taskArray: arr});
+          }
+     }
 }

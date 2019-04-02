@@ -28,24 +28,24 @@
 */
 
 /*
- * Code History
-
- * 03/20/19 - Rheeca Guion - created file, added textinputs for editing schedule
- * 03/27/19 - Rheeca Guion - fixed calls to onDelete and onUpdate
- */
+* Code History
+*
+* 4/01/19 - Rheeca Guion - created file, added textinputs for editing task
+*
+*/
 
 /*
- * File creation date: Mar. 20, 2019
- * Development group:
- * Client group:
+* File creation date: Apr. 1, 2019
+* Development group:
+* Client group:
 
- * Purpose: A screen where details of a schedule are edited
+* Purpose: A screen where details of a task are edited
 
- * Variables:
- *   scheduleTitle: contains schedule title
- *   scheduleStart: contains start time of schedule
- *   scheduleEnd: contains end time of schedule
- */
+* Variables:
+*   taskId: contains task idea
+*   taskIsChecked: contains boolean value whether task is done or not 
+*   taskText: contains task text
+*/
 
 import React from 'react';
 import {
@@ -54,7 +54,6 @@ import {
      TouchableOpacity,
      TouchableWithoutFeedback,
      Keyboard,
-     StyleSheet,
      AsyncStorage,
 } from 'react-native';
 
@@ -62,68 +61,52 @@ import {
      Container,
      Header,
      Content,
-     Text,
-     Body,
-     Left,
-     Right,
      List,
      ListItem,
+     CheckBox,
+     Text,
      Button,
-     Icon,
-     Footer,
+     Icon
 } from 'native-base';
 import styles from './Styles';
 
-export default class EditSchedule extends React.Component {
+export default class Task extends React.Component {
      constructor (props){
           super(props);
           this.state = {
-               scheduleId: this.props.navigation.getParam('id', 0),
-               scheduleTitle: this.props.navigation.getParam('title', 0),
-               scheduleStart: this.props.navigation.getParam('start', 0),
-               scheduleEnd: this.props.navigation.getParam('end', 0),
+               taskId: this.props.navigation.getParam('id', 0),
+               taskIsChecked: this.props.navigation.getParam('isChecked', 0),
+               taskText: this.props.navigation.getParam('text', 0),
           };
      }
 
      render (){
           return (
-               <View style={styles.editSchedule}>
+               <View style={styles.editTask}>
                     <List>
                          <ListItem>
-                              <Text>{this.state.scheduleId}</Text>
+                              <Text>{this.state.taskId}</Text>
                          </ListItem>
                          <ListItem>
                               <TextInput
                                    multiline = {true}
-                                   placeholder='Schedule'
-                                   value={this.state.scheduleTitle}
-                                   onChangeText={(text) => this.setState({scheduleTitle: text})}/>
-                         </ListItem>
-                         <ListItem>
-                              <TextInput
-                                   placeholder='Start'
-                                   value={this.state.scheduleStart}
-                                   onChangeText={(text) => this.setState({scheduleStart: text})}/>
-                         </ListItem>
-                         <ListItem>
-                              <TextInput
-                                   placeholder='End'
-                                   value={this.state.scheduleEnd}
-                                   onChangeText={(text) => this.setState({scheduleEnd: text})}/>
+                                   placeholder='Task'
+                                   value={this.state.taskText}
+                                   onChangeText={(text) => this.setState({taskText: text})}
+                              />
                          </ListItem>
                          <ListItem>
                               <TouchableOpacity style={{marginRight: 20}} button transparent onPress={() => {
-                                        this.props.navigation.state.params.onDelete(this.state.scheduleId);
+                                        this.props.navigation.state.params.onDelete(this.state.taskId);
                                         this.props.navigation.goBack();
                                    }}>
                                    <Icon name='trash' style={{color: '#000'}}/>
                               </TouchableOpacity>
                               <TouchableOpacity button transparent onPress={() => {
                                         this.props.navigation.state.params.onUpdate(
-                                             this.state.scheduleId,
-                                             this.state.scheduleTitle,
-                                             this.state.scheduleStart,
-                                             this.state.scheduleEnd,
+                                             this.state.taskId,
+                                             this.state.taskIsChecked,
+                                             this.state.taskText,
                                         );
                                         this.props.navigation.goBack();
                                    }}>

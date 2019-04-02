@@ -26,6 +26,7 @@
  * Code History
  * 2/22/19 - Rheeca Guion - Added bg
  * 3/21/19 - Rheeca Guion - Added editSchedule, cell, weekCell
+ * 4/01/19 - Rheeca Guion - Added editMemo, editTask, task
 */
 
 /*
@@ -46,6 +47,17 @@ export default StyleSheet.create({
      },
      editSchedule: {
           margin: 20,
+     },
+     editMemo: {
+          margin: 20,
+     },
+     editTask: {
+          margin: 20,
+     },
+     task: {
+          paddingBottom: 0.1,
+          elevation: 0.1,
+          backgroundColor: '#C1FFF0',
      },
      cell: {
           backgroundColor: '#C1FFF0',

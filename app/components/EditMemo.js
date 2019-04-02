@@ -30,21 +30,20 @@
 /*
  * Code History
 
- * 03/20/19 - Rheeca Guion - created file, added textinputs for editing schedule
- * 03/27/19 - Rheeca Guion - fixed calls to onDelete and onUpdate
+ * 4/1/19 - Rheeca Guion - created file, added textinputs for editing memo
  */
 
 /*
- * File creation date: Mar. 20, 2019
+ * File creation date: Apr. 1, 2019
  * Development group:
  * Client group:
 
- * Purpose: A screen where details of a schedule are edited
+ * Purpose: A screen where details of a memo are edited
 
  * Variables:
- *   scheduleTitle: contains schedule title
- *   scheduleStart: contains start time of schedule
- *   scheduleEnd: contains end time of schedule
+ *   memoId: contains memo id
+ *   memoTitle: contains memo title
+ *   memoText: contains memo text
  */
 
 import React from 'react';
@@ -55,75 +54,63 @@ import {
      TouchableWithoutFeedback,
      Keyboard,
      StyleSheet,
-     AsyncStorage,
 } from 'react-native';
 
 import {
      Container,
      Header,
      Content,
-     Text,
-     Body,
-     Left,
-     Right,
      List,
      ListItem,
+     Text,
      Button,
      Icon,
-     Footer,
 } from 'native-base';
 import styles from './Styles';
 
-export default class EditSchedule extends React.Component {
+export default class EditMemo extends React.Component {
      constructor (props){
           super(props);
           this.state = {
-               scheduleId: this.props.navigation.getParam('id', 0),
-               scheduleTitle: this.props.navigation.getParam('title', 0),
-               scheduleStart: this.props.navigation.getParam('start', 0),
-               scheduleEnd: this.props.navigation.getParam('end', 0),
+               memoId: this.props.navigation.getParam('id', 0),
+               memoTitle: this.props.navigation.getParam('title', 0),
+               memoText: this.props.navigation.getParam('text', 0),
           };
      }
 
      render (){
           return (
-               <View style={styles.editSchedule}>
+               <View style={styles.editMemo}>
                     <List>
                          <ListItem>
-                              <Text>{this.state.scheduleId}</Text>
+                              <Text>{this.state.memoId}</Text>
                          </ListItem>
                          <ListItem>
                               <TextInput
                                    multiline = {true}
-                                   placeholder='Schedule'
-                                   value={this.state.scheduleTitle}
-                                   onChangeText={(text) => this.setState({scheduleTitle: text})}/>
+                                   placeholder='Title'
+                                   value={this.state.memoTitle}
+                                   onChangeText={(text) => this.setState({memoTitle: text})}/>
                          </ListItem>
                          <ListItem>
                               <TextInput
-                                   placeholder='Start'
-                                   value={this.state.scheduleStart}
-                                   onChangeText={(text) => this.setState({scheduleStart: text})}/>
-                         </ListItem>
-                         <ListItem>
-                              <TextInput
-                                   placeholder='End'
-                                   value={this.state.scheduleEnd}
-                                   onChangeText={(text) => this.setState({scheduleEnd: text})}/>
+                                   multiline = {true}
+                                   placeholder='Memo'
+                                   value={this.state.memoText}
+                                   onChangeText={(text) => this.setState({memoText: text})}/>
                          </ListItem>
                          <ListItem>
                               <TouchableOpacity style={{marginRight: 20}} button transparent onPress={() => {
-                                        this.props.navigation.state.params.onDelete(this.state.scheduleId);
+                                        this.props.navigation.state.params.onDelete(this.state.memoId);
                                         this.props.navigation.goBack();
                                    }}>
                                    <Icon name='trash' style={{color: '#000'}}/>
                               </TouchableOpacity>
                               <TouchableOpacity button transparent onPress={() => {
                                         this.props.navigation.state.params.onUpdate(
-                                             this.state.scheduleId,
-                                             this.state.scheduleTitle,
-                                             this.state.scheduleStart,
-                                             this.state.scheduleEnd,
+                                             this.state.memoId,
+                                             this.state.memoTitle,
+                                             this.state.memoText,
                                         );
                                         this.props.navigation.goBack();
                                    }}>

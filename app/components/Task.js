@@ -29,10 +29,12 @@
 
 /*
 * Code History
-
+*
 * 2/16/19 - Angelo Vincent R. Delos Santos - Added constructor, props, TextInput, and the functions
 *          called on button presses, checkbox
 * 2/22/19 - Rheeca Guion - Added UI, styles
+* 4/01/19 - Rheeca Guion - removed textinputs to make component editable only in
+*                          EditMemo, removed state
 */
 
 /*
@@ -43,7 +45,7 @@
 * Purpose: Defines the individual instance of a task
 
 * Variables:
-*   taskText: contains task text
+*   text: contains task text
 */
 
 import React from 'react';
@@ -53,55 +55,68 @@ import {
      TouchableOpacity,
      TouchableWithoutFeedback,
      Keyboard,
-     StyleSheet,
-     AsyncStorage,
 } from 'react-native';
 
-import {Container, Header, Content, Card, CardItem, ListItem, CheckBox, Text, Body, Left, Right, Button, Icon} from 'native-base';
+import {
+     Container,
+     Header,
+     Content,
+     Card,
+     CardItem,
+     ListItem,
+     CheckBox,
+     Text,
+     Body,
+     Left,
+     Right,
+     Button,
+     Icon
+} from 'native-base';
+import styles from './Styles';
 
 export default class Task extends React.Component {
      constructor (props){
           super(props);
-          this.state = {
-               taskText: "",
-          };
+     }
+
+     renderCheckBox (){
+          if (this.props.isChecked) {
+               return (
+                    <CheckBox
+                         checked={true}
+                         onPress={this.props.tickMethod}
+                    />
+               );
+          } else {
+               return (
+                    <CheckBox
+                         checked={false}
+                         onPress={this.props.tickMethod}
+                    />
+               );
+          }
      }
 
      render (){
+          let text = this.props.text;
+          if (text == "") {
+               text = "Task";
+          }
           return (
                <View >
-                    <Card flexDirection='row' style={ styles.card }>
+                    <Card flexDirection='row' style={ styles.task }>
                          <CardItem style={{flex: 1}}>
-                              <CheckBox
-                              checked={this.state.checked}
-                              onPress={() => this.setState({checked: !this.state.checked})}
-                              />
+                              {this.renderCheckBox()}
                          </CardItem>
-                         <CardItem style={{flex: 7}}>
-                              <View style={{backgroundColor: 'rgba(0,0,0,0)'}}>
-                                   <TextInput
-                                   multiline = {true}
-                                   placeholder='Task'
-                                   value={this.state.taskText}
-                                   onChangeText={(text) => this.setState({taskText: text})}
-                                   />
-                              </View>
-                         </CardItem>
-                         <CardItem style={{flex: 1}}>
-                              <TouchableOpacity button onPress={this.props.deleteMethod} >
-                                   <Icon name='close' style={{color: '#000'}}/>
-                              </TouchableOpacity>
-                         </CardItem>
+                         <TouchableOpacity button transparent onPress={this.props.editMethod}>
+                              <CardItem style={{flex: 7}}>
+                                   <View style={{backgroundColor: 'rgba(0,0,0,0)'}}>
+                                        <Text>{text}</Text>
+                                   </View>
+                              </CardItem>
+                         </TouchableOpacity>
                     </Card>
                </View>
           )
      }
 }
-
-const styles = StyleSheet.create({
-     card: {
-          paddingBottom: 0.1,
-          elevation: 0.1,
-          backgroundColor: '#C1FFF0',
-     },
-});

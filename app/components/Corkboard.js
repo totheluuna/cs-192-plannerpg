@@ -1,6 +1,6 @@
 /*
 * MIT License
-* Copyright (c) 2019 Datuluna Ali G. Dilangalen, Rheeca S. Guion
+* Copyright (c) 2019 Datuluna Ali G. Dilangalen, Rheeca S. Guion, Angelo Vincent R. Delos Santos
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
@@ -30,10 +30,16 @@
             getMemos, functions called on button presses, memos array to display
             memos
  * 2/08/19 - Rheeca Guion - add comments, cleanup
- * 2/16/19 - Angelo Vincent R. Delos Santos - Added currId to constructor, fixed the
+ * 2/16/19 - Angelo Vincent R. Delos Santos - Added memoCurrId to constructor, fixed the
             delete functionality to delete the proper memo (fixed memo mapping in Render,
             modified addMemo, modified deleteMemo)
  * 2/18/19 - Rheeca Guion - renamed to Corkboard
+ * 4/01/19 - Rheeca Guion - added the findObjectById function, created the functions
+ *                           editMemo, updateMemo so memos can be updated
+ *                        - had memoArray hold all the memo details, changed addMemo and
+ *                            deleteMemo to account for this
+ *                        - fixed saveMemos and getMemos so data can be stored in
+ *                           AsyncStorage
 */
 
 /*
@@ -61,6 +67,7 @@ import {
 } from 'react-native';
 import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab } from 'native-base';
 import Memo from './Memo';
+import EditMemo from './EditMemo';
 import styles from './Styles';
 
 export default class Corkboard extends Component {
@@ -68,12 +75,22 @@ export default class Corkboard extends Component {
           super(props);
           this.state = {
                memoArray: [],
-               currId: 0,
+               memoCurrId: 0,
           };
      }
 
      componentDidMount (){
           this.getMemos();
+     }
+
+     findObjectById (array, id){
+          let object = null;
+          array.map((obj) => {
+               if (obj.id == id) {
+                    object = obj;
+               }
+          });
+          return object;
      }
 
      displayMemos (memos) {
@@ -91,10 +108,13 @@ export default class Corkboard extends Component {
      }
 
      render (){
-          let memos = this.state.memoArray.map((num) => {
-               return <Memo key={num}
-               deleteMethod={ () => this.deleteMemo(num) }
-               saveMethod={ () => this.saveMemos }/>
+          let memos = this.state.memoArray.map((memoItem) => {
+               return <Memo
+                    id={memoItem.id}
+                    title={memoItem.title}
+                    text={memoItem.text}
+                    editMethod={ () => this.editMemo(memoItem.id) }
+               />
           });
 
           return (
@@ -105,41 +125,64 @@ export default class Corkboard extends Component {
                          </Button>
                     </View>
                     <Content>
-                    {this.displayMemos(memos)}
+                         {this.displayMemos(memos)}
                     </Content>
                </Container>
           );
      }
 
      addMemo (){
-       /*
-        * addMemo
-        * Creation date: Feb. 5, 2019
-        * Purpose: Adds a new blank memo
-        */
-       let newMemo = this.state.currId;
-       let arr = this.state.memoArray;
-       arr.push(newMemo);
-       this.setState({ currId: this.state.currId+1 });
-       this.setState({ memoArray: arr });
-     }
-
-     editMemo (key, val){
-       /*
-        * editMemo
-        * Creation date: Feb. 5, 2019
-        * Purpose: Edits a memo
-        */
-     }
-
-     deleteMemo (key){
           /*
-           * deleteMemo
-           * Creation date: Feb. 5, 2019
-           * Purpose: Deletes a memo
+          * addMemo
+          * Creation date: Feb. 5, 2019
+          * Purpose: Adds a new blank memo
+          */
+          let newMemo = {
+               id: this.state.memoCurrId,
+               title: "",
+               text: "",
+          };
+
+          let arr = this.state.memoArray;
+          arr.push(newMemo);
+          this.setState({ memoCurrId: this.state.memoCurrId + 1 });
+          this.setState({ memoArray: arr });
+     }
+
+     editMemo (id){
+          /*
+           * editMemo
+           * Creation date: Apr. 1, 2019
+           * Purpose: Edits a memo
            */
-          this.state.memoArray.splice( this.state.memoArray.indexOf(key), 1);
-          this.setState({memoArray: this.state.memoArray});
+          let memo = this.findObjectById(this.state.memoArray, id);
+          if (memo) {
+               this.props.navigation.navigate('EditMemo', {
+                    id: id,
+                    title: memo.title,
+                    text: memo.text,
+                    onUpdate: this.updateMemo.bind(this),
+                    onDelete: this.deleteMemo.bind(this)
+               });
+          }
+     }
+
+     updateMemo (id, title, text) {
+          /*
+          * updateMemo
+          * Creation date: Apr. 1, 2019
+          * Purpose: Updates the memo in the state
+          */
+          let arr = this.state.memoArray;
+          let newArr = arr.map((memoItem) => {
+               if(memoItem.id == id) {
+                    memoItem.title = title;
+                    memoItem.text = text;
+               }
+               return memoItem;
+          });
+          this.setState({ memoArray: newArr });
+          this.saveMemos();
      }
 
      saveMemos = async() => {
@@ -150,7 +193,11 @@ export default class Corkboard extends Component {
            */
           try {
                await AsyncStorage.setItem('memoArray', JSON.stringify(this.state.memoArray));
-               alert("Saved!");
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               await AsyncStorage.setItem('memoCurrId', JSON.stringify(this.state.memoCurrId));
           } catch (error) {
                alert(error);
           }
@@ -168,9 +215,31 @@ export default class Corkboard extends Component {
                if(parsed) {
                     this.setState({memoArray: parsed})
                }
-               //alert(parsed);
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               let temp = await AsyncStorage.getItem('memoCurrId');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({memoCurrId: parsed})
+               }
           } catch (error) {
                alert(error);
           }
      };
+
+     deleteMemo (id){
+          /*
+           * deleteMemo
+           * Creation date: Feb. 5, 2019
+           * Purpose: Deletes a memo
+           */
+          let memo = this.findObjectById(this.state.memoArray, id);
+          if (memo){
+               let arr = this.state.memoArray;
+               arr.splice(arr.indexOf(memo), 1);
+               this.setState({memoArray: arr});
+          }
+     }
 }
