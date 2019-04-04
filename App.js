@@ -36,6 +36,8 @@
 *                            Added AppContainer, StackNavigator, and
 *                            MaterialTopTabNavigator for navigation
 * 4/01/19 - Rheeca Guion - Added StackNavigators for Corkboard and TaskList
+* 4/04/19 - Rheeca Guion - Added getData and saveData, and passing screenProps to
+*                          AppContainer
 */
 
 /*
@@ -160,9 +162,15 @@ export default class App extends React.Component {
      constructor() {
           super();
           this.state = {
-               isReady: false
+               isReady: false,
+               taskPoints: 0,
           };
      }
+
+     componentDidMount (){
+          this.getData();
+     }
+
      componentWillMount() {
           this.loadFonts();
      }
@@ -184,6 +192,11 @@ export default class App extends React.Component {
           alert("Cleared Storage");
      }
 
+     updatePoints(value) {
+          this.setState({ taskPoints: value });
+          this.saveData();
+     }
+
      render() {
           if (!this.state.isReady) {
                return <Expo.AppLoading />;
@@ -191,9 +204,39 @@ export default class App extends React.Component {
 
           return (
                <Container>
-                    <AppContainer />
+                    <AppContainer screenProps={{ taskPoints: this.state.taskPoints, updatePoints: this.updatePoints.bind(this) }} />
                     <Button title="Clear Async Storage" onPress={this.clearAsyncStorage} />
                </Container>
           );
      }
+
+     saveData = async() => {
+          /*
+          * saveData
+          * Creation date: Apr. 4, 2019
+          * Purpose: Save data in AsyncStorage
+          */
+          try {
+               await AsyncStorage.setItem('taskPoints', JSON.stringify(this.state.taskPoints));
+          } catch (error) {
+               alert(error);
+          }
+     };
+
+     getData = async () => {
+          /*
+          * getData
+          * Creation date: Apr. 04, 2019
+          * Purpose: Get saved data from AsyncStorage
+          */
+          try {
+               let temp = await AsyncStorage.getItem('taskPoints');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({taskPoints: parsed})
+               }
+          } catch (error) {
+               alert(error);
+          }
+     };
 }

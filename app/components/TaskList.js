@@ -77,6 +77,7 @@ export default class TaskList extends Component {
           this.state = {
                taskArray: [],
                taskCurrId: 0,
+               taskPoints: this.props.screenProps.taskPoints,
           };
      }
 
@@ -254,5 +255,6 @@ export default class TaskList extends Component {
                arr.splice(arr.indexOf(task), 1);
                this.setState({taskArray: arr});
           }
+          this.saveTasks();
      }
 }

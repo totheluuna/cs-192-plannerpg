@@ -40,6 +40,7 @@
 *                           editSchedule, updateSchedule so schedules can be updated
 * 04/01/19 - Rheeca Guion - fixed saveSchedules and getSchedules so data can be stored in
 *                           AsyncStorage
+* 04/04/19 - Rheeca Guion - Added TouchableOpacity to the calendar dates 
 */
 
 /*
@@ -64,6 +65,7 @@ import {
      Dimensions,
      Text,
      View,
+     TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -74,6 +76,7 @@ import {
      Icon,
      List,
      ListItem,
+
 } from 'native-base';
 
 import moment from "moment";
@@ -83,9 +86,10 @@ import styles from './Styles';
 export default class Calendar extends React.Component {
      constructor(props) {
           super(props);
+          let today = new Date();
           this.state={
-               currentMonth: new Date(),
-               selectedDate: new Date(),
+               currentMonth: today,
+               selectedDate: moment(today).startOf('day'),
                datesWithSchedules: [],
                schedCurrId: 0,
           };
@@ -245,12 +249,12 @@ export default class Calendar extends React.Component {
 
      renderCell = ({ item, index }) => {
           if (item.empty === true) {
-               return <View style={[styles.item, styles.itemInvisible]} />;
+               return <View style={styles.cell} />;
           }
           return (
-               <View style={styles.cell}>
+               <TouchableOpacity style={styles.cell} onPress={() => this.onDateClick(item.day)}>
                     <Text >{item.day}</Text>
-               </View>
+               </TouchableOpacity>
           );
      };
 
@@ -374,6 +378,7 @@ export default class Calendar extends React.Component {
                arr.push(newDateWithSched);
                this.setState({ datesWithSchedules: arr });
           }
+          this.saveSchedules();
      }
 
      editSchedule (id){
@@ -489,5 +494,6 @@ export default class Calendar extends React.Component {
                return dateItem;
           });
           this.setState({ datesWithSchedules: arr2 });
+          this.saveSchedules();
      }
 }
