@@ -255,5 +255,6 @@ export default class Corkboard extends Component {
                arr.splice(arr.indexOf(memo), 1);
                this.setState({memoArray: arr});
           }
+          this.saveMemos();
      }
 }

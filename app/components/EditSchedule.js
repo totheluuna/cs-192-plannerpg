@@ -73,6 +73,7 @@ import {
      Footer,
 } from 'native-base';
 import styles from './Styles';
+import TimePicker from 'react-native-simple-time-picker';
 
 export default class EditSchedule extends React.Component {
      constructor (props){
@@ -82,10 +83,13 @@ export default class EditSchedule extends React.Component {
                scheduleTitle: this.props.navigation.getParam('title', 0),
                scheduleStart: this.props.navigation.getParam('start', 0),
                scheduleEnd: this.props.navigation.getParam('end', 0),
+               startHours: 0,
+               startMinutes: 0,
           };
      }
 
      render (){
+          const { startHours, startMinutes } = this.state;
           return (
                <View style={styles.editSchedule}>
                     <List>

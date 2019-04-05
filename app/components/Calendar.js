@@ -40,6 +40,11 @@
 *                           editSchedule, updateSchedule so schedules can be updated
 * 04/01/19 - Rheeca Guion - fixed saveSchedules and getSchedules so data can be stored in
 *                           AsyncStorage
+* 04/04/19 - Rheeca Guion - Added TouchableOpacity to the calendar dates
+* 04/05/19 - Rheeca Guion - Fixed inconsistencies in handling date
+*                         - Edited hasDate to use map rather than for loop
+                          - Fixed warning with key in a List and FlatList
+                          - Selected date is highlighted when selected
 */
 
 /*
@@ -64,6 +69,7 @@ import {
      Dimensions,
      Text,
      View,
+     TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -74,6 +80,7 @@ import {
      Icon,
      List,
      ListItem,
+
 } from 'native-base';
 
 import moment from "moment";
@@ -83,9 +90,11 @@ import styles from './Styles';
 export default class Calendar extends React.Component {
      constructor(props) {
           super(props);
+          let todayStr = moment().format('YYYY-MM-DD');
+          let today = moment(todayStr, 'YYYY-MM-DD');
           this.state={
-               currentMonth: new Date(),
-               selectedDate: new Date(),
+               currentMonth: today,
+               selectedDate: today,
                datesWithSchedules: [],
                schedCurrId: 0,
           };
@@ -116,12 +125,14 @@ export default class Calendar extends React.Component {
           * Purpose: Returns true if a dateWithSchedule object exists in
           *          datesWithSchedules whose date = date
           */
-          for (let dateItem in this.state.datesWithSchedules) {
+          let flag = false;
+          let arr = this.state.datesWithSchedules;
+          arr.map((dateItem) => {
                if (moment(dateItem.date).isSame(date, 'day')) {
-                    return true;
+                    flag = true;
                }
-          }
-          return false;
+          })
+          return flag;
      }
 
      getDate (date){
@@ -167,7 +178,7 @@ export default class Calendar extends React.Component {
                let currDate = this.getDate(date);
                let schedules = currDate.schedulesArray.map((scheduleItem) => {
                     return <Schedule
-                         id={scheduleItem.id}
+                         key={scheduleItem.id}
                          title={scheduleItem.title}
                          start={scheduleItem.start}
                          end={scheduleItem.end}
@@ -176,7 +187,7 @@ export default class Calendar extends React.Component {
                });
                return schedules;
           } else {
-               return false;
+               return <Text style={{justifyContent: 'center'}}>There are no schedules.</Text>;
           }
      }
 
@@ -238,6 +249,7 @@ export default class Calendar extends React.Component {
                <FlatList
                     data={days}
                     renderItem={this.renderWeekCell}
+                    keyExtractor={(item, index) => item.formDay}
                     numColumns={7}
                />
           );
@@ -245,12 +257,13 @@ export default class Calendar extends React.Component {
 
      renderCell = ({ item, index }) => {
           if (item.empty === true) {
-               return <View style={[styles.item, styles.itemInvisible]} />;
+               return <View style={styles.cell} />;
           }
+          let style = moment(item.date).isSame(item.selected) ? styles.cell : styles.selectedCell;
           return (
-               <View style={styles.cell}>
-                    <Text >{item.day}</Text>
-               </View>
+               <TouchableOpacity style={style} onPress={() => this.onDateClick(item.date)}>
+                    <Text >{item.formDay}</Text>
+               </TouchableOpacity>
           );
      };
 
@@ -260,7 +273,8 @@ export default class Calendar extends React.Component {
           * Creation date: Mar. 5, 2019
           * Purpose: Renders days of the month
           */
-          const { currentMonth, selectedDate } = this.state;
+          const currentMonth = this.state.currentMonth;
+          const selectedDate = this.state.selectedDate;
           const monthStart = moment(currentMonth).startOf('month');
           const monthEnd = moment(monthStart).endOf('month');
           const startDate = moment(monthStart).startOf('week');
@@ -272,12 +286,13 @@ export default class Calendar extends React.Component {
           let days = [];
           let day = startDate;
           let formattedDate = "";
+          let isSelected = false;
 
           while (day <= endDate) {
                formattedDate = moment(day).format(dateFormat);
                const cloneDay = day;
                days.push(
-                    {day: formattedDate}
+                    {date: day, formDay: formattedDate, selected: selectedDate}
                );
                day = moment(day).add(1, 'days');
           }
@@ -286,6 +301,7 @@ export default class Calendar extends React.Component {
                <FlatList
                     data={days}
                     renderItem={this.renderCell}
+                    keyExtractor={(item, index) => item.formDay}
                     numColumns={7}
                />
           );
@@ -374,6 +390,7 @@ export default class Calendar extends React.Component {
                arr.push(newDateWithSched);
                this.setState({ datesWithSchedules: arr });
           }
+          this.saveSchedules();
      }
 
      editSchedule (id){
@@ -489,5 +506,6 @@ export default class Calendar extends React.Component {
                return dateItem;
           });
           this.setState({ datesWithSchedules: arr2 });
+          this.saveSchedules();
      }
 }
