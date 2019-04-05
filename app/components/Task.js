@@ -35,6 +35,7 @@
 * 2/22/19 - Rheeca Guion - Added UI, styles
 * 4/01/19 - Rheeca Guion - removed textinputs to make component editable only in
 *                          EditMemo, removed state
+* 4/04/19 - Vince Delos Santos - added styles to card, buttons, and cardItems
 */
 
 /*
@@ -85,6 +86,7 @@ export default class Task extends React.Component {
                     <CheckBox
                          checked={true}
                          onPress={this.props.tickMethod}
+                         color='black'
                     />
                );
           } else {
@@ -92,6 +94,7 @@ export default class Task extends React.Component {
                     <CheckBox
                          checked={false}
                          onPress={this.props.tickMethod}
+                         color='black'
                     />
                );
           }
@@ -103,15 +106,15 @@ export default class Task extends React.Component {
                text = "Task";
           }
           return (
-               <View >
-                    <Card flexDirection='row' style={ styles.task }>
-                         <CardItem style={{flex: 1}}>
+               <View>
+                    <Card bordered flexDirection='row' style={ styles.taskStyle }>
+                         <CardItem style={styles.checkboxStyle}>
                               {this.renderCheckBox()}
                          </CardItem>
                          <TouchableOpacity button transparent onPress={this.props.editMethod}>
-                              <CardItem style={{flex: 7}}>
-                                   <View style={{backgroundColor: 'rgba(0,0,0,0)'}}>
-                                        <Text>{text}</Text>
+                              <CardItem style={styles.taskCardStyle}>
+                                   <View>
+                                        <Text style={styles.taskTextStyle}>{text}</Text>
                                    </View>
                               </CardItem>
                          </TouchableOpacity>

@@ -1,7 +1,7 @@
 /*
 * MIT License
 
-* Copyright (c) 2019 Datuluna Ali G. Dilangalen
+* Copyright (c) 2019 Datuluna Ali G. Dilangalen, Rheeca Guion, Angelo Vincent R. Delos Santos
 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,7 @@
 *                            Added AppContainer, StackNavigator, and
 *                            MaterialTopTabNavigator for navigation
 * 4/01/19 - Rheeca Guion - Added StackNavigators for Corkboard and TaskList
+* 4/04/19 - Vince Delos Santos - Modified AppTabNavigator & StackNavigators for TaskList and Corkboard
 */
 
 /*
@@ -98,13 +99,9 @@ const CorkboardNavigator = createStackNavigator(
           EditMemo: EditMemo,
      },
      {
-          initialRouteName: "Corkboard"
+          initialRouteName: "Corkboard",
+          headerMode: 'none',
      },
-     {
-          navigationOptions: {
-               header: null,
-          },
-     }
 );
 
 const TaskListNavigator = createStackNavigator(
@@ -114,29 +111,26 @@ const TaskListNavigator = createStackNavigator(
           EditTask: EditTask,
      },
      {
-          initialRouteName: "TaskList"
+          initialRouteName: "TaskList",
+          headerMode: 'none',
      },
-     {
-          navigationOptions: {
-               header: null,
-          },
-     }
 );
 
 const AppTabNavigator = createMaterialTopTabNavigator(
      {
+          "Task List": TaskListNavigator,
+          Corkboard: CorkboardNavigator,
           Progress: ViewProgress,
           Calendar: CalendarNavigator,
-          Corkboard: CorkboardNavigator,
-          "Task List": TaskListNavigator,
      },
      {
+          tabBarPosition: 'bottom',
           tabBarOptions: {
                style: {
-                    backgroundColor: 'white',
+                    backgroundColor: 'black',
                },
                labelStyle: {
-                    color: 'black',
+                    color: 'white',
                },
           }
      },
@@ -149,7 +143,7 @@ const MainNavigator = createStackNavigator(
      {
           headerMode: 'none',
           navigationOptions: {
-               header: null,
+               headerTitle: "PlanneRPG",
           },
      }
 );

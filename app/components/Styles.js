@@ -1,6 +1,6 @@
 /*
 * MIT License
-* Copyright (c) 2019 Rheeca S. Guion
+* Copyright (c) 2019 Rheeca S. Guion, Angelo Vincent R. Delos Santos
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
@@ -27,6 +27,7 @@
  * 2/22/19 - Rheeca Guion - Added bg
  * 3/21/19 - Rheeca Guion - Added editSchedule, cell, weekCell
  * 4/01/19 - Rheeca Guion - Added editMemo, editTask, task
+ * 4/04/19 - Vince Delos Santos - added everything from displayMemos to taskTextStyle
 */
 
 /*
@@ -41,10 +42,6 @@ import React, { Component } from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
-     bg: {
-          backgroundColor: '#FBFBFF',
-          paddingHorizontal: 20,
-     },
      editSchedule: {
           margin: 20,
      },
@@ -53,11 +50,6 @@ export default StyleSheet.create({
      },
      editTask: {
           margin: 20,
-     },
-     task: {
-          paddingBottom: 0.1,
-          elevation: 0.1,
-          backgroundColor: '#C1FFF0',
      },
      cell: {
           backgroundColor: '#C1FFF0',
@@ -74,5 +66,120 @@ export default StyleSheet.create({
           flex: 1,
           margin: 1,
           height: Dimensions.get('window').width / 9,
-     }
+     },
+
+     displayMemos: {
+          flexWrap: 'wrap', 
+          flexDirection: 'row',
+     },
+     displayNoMemos: {
+          flex: 1, 
+          justifyContent: "center", 
+          alignItems: "center",
+     },
+     displayNoMemosText: {
+          color: '#445C70', 
+          fontSize: 20, 
+          fontWeight:'bold',
+     },
+     corkboardBase: {
+          backgroundColor: 'black',
+     },
+     corkboardBackground: {
+          flex: 1,
+          width: null,
+          height: null,
+     },
+     corkboardBackgroundPosition: {
+          paddingHorizontal: 20, 
+          paddingVertical: 10,
+     },
+     corkboardHeader: {
+          backgroundColor:'#5e3023', 
+          alignItems: 'center', 
+          justifyContent: 'center',
+          margin: 7,     
+          height: 80,
+     },
+     corkboardHeaderText: {
+          fontSize:70, 
+          fontWeight:'bold', 
+          color:'white',
+     },
+     fabPosition: {
+          flexDirection: 'row', 
+          justifyContent: 'flex-end',
+     },
+     fabColor: {
+          backgroundColor:'#c08552',
+     },
+     fabColor2: {
+          backgroundColor:'#84cdee',
+     },
+     fabStyle: {
+          color: 'white', 
+          justifyContent: 'center', 
+          fontSize: 30,
+     },
+     memoHeader: {
+          justifyContent: 'center', 
+          backgroundColor:'#895737', 
+          height: 15,
+     },
+     memoStyle: {
+          backgroundColor:'#f3e9dc',
+          width: 155,
+     },
+
+     tasklistBase: {
+          flexDirection:'row', 
+          backgroundColor:'#edf7fc',
+     },
+     tasklistHeader: {
+          flexDirection:'column', 
+          width: 50, 
+          height: '100%', 
+          alignItems:'center', 
+          justifyContent:'center', 
+          backgroundColor: '#50b8e7'
+     },
+     tasklistBackground: {
+          flex: 1,
+          width: null,
+          height: null,
+     },
+     displayTasks: {
+          paddingHorizontal: 15, 
+          backgroundColor:'transparent',
+     },
+     displayNoTasks: { 
+          flex: 1, 
+          justifyContent: "center", 
+          alignItems: "center", 
+          paddingVertical: 40,
+     },
+     displayNoTasksText: { 
+          color: 'black', 
+          fontSize:20, 
+          fontWeight:'bold',
+     },
+     taskStyle: {
+          backgroundColor: '#dcf0fa',
+          paddingHorizontal: 5, 
+          paddingBottom: 1,
+          borderTopLeftRadius: 20,
+          borderTopRightRadius: 20,
+          borderBottomLeftRadius: 20,
+          borderBottomRightRadius: 20,
+     },
+     checkboxStyle: {
+          flex: 1, 
+          backgroundColor:'transparent',
+     },
+     taskCardStyle: {
+          backgroundColor: 'transparent',
+     },
+     taskTextStyle: {
+          fontSize: 18,
+     },
 });

@@ -1,7 +1,7 @@
 /*
 * MIT License
 
-* Copyright (c) 2019 Datuluna Ali G. Dilangalen, Rheeca S. Guion
+* Copyright (c) 2019 Datuluna Ali G. Dilangalen, Rheeca S. Guion, Angelo Vincent R. Delos Santos
 
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,7 @@
  * 2/08/19 - Rheeca Guion - add comments, cleanup
  * 4/01/19 - Rheeca Guion - removed textinputs to make component editable only in
  *                          EditMemo, removed state
+ * 4/04/19 - Vince Delos Santos - Added styles to cards, buttons, cardItems
  */
 
 /*
@@ -62,6 +63,7 @@ import {
 } from 'react-native';
 
 import {Container, Header, Content, Card, CardItem, Text, Body, Left, Right, Button, Icon} from 'native-base';
+import styles from './Styles';
 
 export default class Memo extends React.Component {
      constructor (props){
@@ -78,12 +80,12 @@ export default class Memo extends React.Component {
                text = "Memo";
           }
           return (
-               <Card key={this.props.id}>
+               <Card key={this.props.id} style={styles.memoStyle}>
                     <TouchableOpacity button transparent onPress={this.props.editMethod}>
-                         <CardItem header >
-                              <Text>{title}</Text>
+                         <CardItem header bordered style={styles.memoHeader}>
+                              <Text style={{color:'white'}}>{title}</Text>
                          </CardItem>
-                         <CardItem>
+                         <CardItem style={styles.memoStyle}>
                               <Body>
                                    <Text>{text}</Text>
                               </Body>

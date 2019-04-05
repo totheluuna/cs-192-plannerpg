@@ -34,6 +34,7 @@ tasks array to display, tasks
 *                            deleteTask to account for this
 *                        - fixed saveTasks and getTasks so data can be stored in
 *                           AsyncStorage
+ * 4/04/19 - Vince Delos Santos - added styles to containers, texts, and headers. Added images and buttons
 */
 
 /*
@@ -57,7 +58,8 @@ import {
      TextInput,
      Image,
      TouchableOpacity,
-     AsyncStorage
+     AsyncStorage,
+     ImageBackground
 } from 'react-native';
 import {
      Container,
@@ -66,10 +68,12 @@ import {
      Title,
      Button,
      Icon,
-     View
+     View,
+     Fab,
 } from 'native-base';
 import Task from './Task';
 import styles from './Styles';
+import tl from './tl.jpg'
 
 export default class TaskList extends Component {
      constructor (props){
@@ -101,8 +105,8 @@ export default class TaskList extends Component {
                );
           } else {
                return (
-                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                         <Text style={{ color: '#445C70' }}>There are no tasks to show.</Text>
+                    <View style={styles.displayNoTasks}>
+                         <Text style={styles.displayNoTasksText}>There are no tasks to show.</Text>
                     </View>
                );
           }
@@ -119,15 +123,20 @@ export default class TaskList extends Component {
                />
           });
           return (
-               <Container style={styles.bg}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                         <Button onPress={ this.addTask.bind(this) } transparent >
-                              <Icon name='add' style={{color: '#E2858D'}}/>
-                         </Button>
-                    </View>
-                    <Content>
-                         {this.displayTasks(tasks)}
-                    </Content>
+               <Container style={styles.tasklistBase}>
+                    <Header style={styles.tasklistHeader}>
+                         <Text style={styles.corkboardHeaderText}>TASK LIST</Text>
+                    </Header>
+                    <ImageBackground source={tl} style={styles.tasklistBackground} resizeMode='cover'>
+                         <Content style={styles.displayTasks}>
+                              {this.displayTasks(tasks)}
+                         </Content>
+                         <View style={styles.fabPosition}>
+                              <Fab onPress={this.addTask.bind(this)} position="bottomRight" style={styles.fabColor2}>
+                                   <Icon name='add' style={styles.fabStyle}/>
+                              </Fab>
+                         </View>
+                    </ImageBackground>
                </Container>
           );
      }

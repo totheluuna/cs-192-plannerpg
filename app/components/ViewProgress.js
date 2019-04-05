@@ -152,7 +152,8 @@ const styles = StyleSheet.create({
      container: {
           flex: 1,
           justifyContent: 'space-evenly',
-          padding: 10,
+          padding: 30,
+          backgroundColor: '#dad7cd'
 },
 
 

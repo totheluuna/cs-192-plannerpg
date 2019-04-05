@@ -40,6 +40,7 @@
  *                            deleteMemo to account for this
  *                        - fixed saveMemos and getMemos so data can be stored in
  *                           AsyncStorage
+ * 4/04/19 - Vince Delos Santos - added styles to containers, texts, and headers. Added images and buttons
 */
 
 /*
@@ -63,12 +64,18 @@ import {
      TextInput,
      Image,
      TouchableOpacity,
-     AsyncStorage
+     AsyncStorage,
+     ImageBackground,
+     FlatList,
+     ListView
 } from 'react-native';
 import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab } from 'native-base';
 import Memo from './Memo';
 import EditMemo from './EditMemo';
 import styles from './Styles';
+import cb from './cb.jpg';
+import { Col, Row, Grid } from "react-native-easy-grid";
+import SquareGrid from "react-native-square-grid"
 
 export default class Corkboard extends Component {
      constructor (props){
@@ -96,12 +103,14 @@ export default class Corkboard extends Component {
      displayMemos (memos) {
           if (memos && memos.length > 0) {
                return (
-                    memos
+                  <View style={styles.displayMemos}>
+                    {memos}
+                  </View>
                );
           } else {
                return (
-                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-                         <Text style={{ color: '#445C70' }}>There are no memos to show.</Text>
+                    <View style={styles.displayNoMemos}>
+                         <Text style={styles.displayNoMemosText}>There are no memos to show.</Text>
                     </View>
                );
           }
@@ -118,15 +127,20 @@ export default class Corkboard extends Component {
           });
 
           return (
-               <Container style={styles.bg}>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                         <Button onPress={ this.addMemo.bind(this) } transparent >
-                              <Icon name='add' style={{color: '#E2858D'}}/>
-                         </Button>
-                    </View>
-                    <Content>
-                         {this.displayMemos(memos)}
-                    </Content>
+               <Container style={styles.corkboardBase}>
+                 <Header style={styles.corkboardHeader}>
+                    <Text style={styles.corkboardHeaderText}>CORKBOARD</Text>
+                 </Header>
+                 <ImageBackground source={cb} style={styles.corkboardBackground} resizeMode='stretch'>
+                      <Content style={styles.corkboardBackgroundPosition}>
+                          {this.displayMemos(memos)}
+                      </Content>
+                      <View style={styles.fabPosition}>
+                           <Fab onPress={this.addMemo.bind(this)} position="bottomRight" style={styles.fabColor}>
+                                <Icon name='add' style={styles.fabStyle}/>
+                           </Fab>
+                      </View>
+                 </ImageBackground>
                </Container>
           );
      }
