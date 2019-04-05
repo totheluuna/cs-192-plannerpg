@@ -67,6 +67,14 @@ export default StyleSheet.create({
           margin: 1,
           height: Dimensions.get('window').width / 9,
      },
+     selectedCell: {
+          backgroundColor: '#DDFFF6',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          margin: 1,
+          height: Dimensions.get('window').width / 9,
+     },
      weekCell: {
           backgroundColor: '#FBFBFF',
           alignItems: 'center',

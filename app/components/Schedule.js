@@ -31,7 +31,7 @@
  * Code History
 
  * 03/05/19 - Rheeca Guion - created file
- * 03/27/19 - Rheeca Guion - removed textinputs to make component editable only in 
+ * 03/27/19 - Rheeca Guion - removed textinputs to make component editable only in
  *                           EditSchedule
  */
 
@@ -92,7 +92,7 @@ export default class Schedule extends React.Component {
                end = "End";
           }
           return (
-               <ListItem key={this.props.id}>
+               <ListItem>
                     <TouchableOpacity button transparent onPress={this.props.editMethod}>
                          <Header>
                               <Text>{title}</Text>
