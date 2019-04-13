@@ -34,7 +34,8 @@ tasks array to display, tasks
 *                            deleteTask to account for this
 *                        - fixed saveTasks and getTasks so data can be stored in
 *                           AsyncStorage
- * 4/04/19 - Vince Delos Santos - added styles to containers, texts, and headers. Added images and buttons
+* 4/04/19 - Vince Delos Santos - added styles to containers, texts, and headers. Added images and buttons
+* 4/08/19 - Rheeca Guion - taskPoints are updated when checkboxes are ticked 
 */
 
 /*
@@ -116,7 +117,7 @@ export default class TaskList extends Component {
      render (){
           let tasks = this.state.taskArray.map((taskItem) => {
                return <Task
-                    id={taskItem.id}
+                    key={taskItem.id}
                     isChecked={taskItem.isChecked}
                     text={taskItem.text}
                     tickMethod={ () => this.tickCheckBox(taskItem.id) }
@@ -126,7 +127,7 @@ export default class TaskList extends Component {
           return (
                <Container style={styles.tasklistBase}>
                     <Header style={styles.tasklistHeader}>
-                         <Text style={styles.corkboardHeaderText}>TASK LIST</Text>
+                         <Text style={styles.corkboardHeaderText}>TASKLIST</Text>
                     </Header>
                     <ImageBackground source={tl} style={styles.tasklistBackground} resizeMode='cover'>
                          <Content style={styles.displayTasks}>
@@ -143,9 +144,21 @@ export default class TaskList extends Component {
      }
 
      tickCheckBox (id){
+          /*
+          * tickCheckBox
+          * Creation date: Apr. 01, 2019
+          * Purpose: Updates taskPoints when a task is checked or unchecked
+          */
           let arr = this.state.taskArray;
+          let points = this.state.taskPoints;
+
           let newArr = arr.map((taskItem) => {
                if(taskItem.id == id) {
+                    if(taskItem.isChecked) {
+                         this.setState({ taskPoints: points-1 });
+                    } else {
+                         this.setState({ taskPoints: points+1 });
+                    }
                     taskItem.isChecked = !(taskItem.isChecked);
                }
                return taskItem;
@@ -224,6 +237,7 @@ export default class TaskList extends Component {
           } catch (error) {
                alert(error);
           }
+          this.props.screenProps.updatePoints(this.state.taskPoints); // notes: when this line is placed in tickCheckBox, the value received by ViewProgress is delayed by one step
      };
 
      getTasks = async () => {

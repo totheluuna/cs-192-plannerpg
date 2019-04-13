@@ -36,12 +36,10 @@
 *                            Added AppContainer, StackNavigator, and
 *                            MaterialTopTabNavigator for navigation
 * 4/01/19 - Rheeca Guion - Added StackNavigators for Corkboard and TaskList
-<<<<<<< HEAD
-* 4/04/19 - Vince Delos Santos - Modified AppTabNavigator & StackNavigators for TaskList and Corkboard
-=======
 * 4/04/19 - Rheeca Guion - Added getData and saveData, and passing screenProps to
 *                          AppContainer
->>>>>>> 5142aebcf012ade734159e6dfe3fda71ab07dc16
+* 4/04/19 - Vince Delos Santos - Modified AppTabNavigator & StackNavigators for TaskList and Corkboard
+* 4/08/19 - Rheeca Guion - Created function updatePoints
 */
 
 /*
@@ -186,6 +184,11 @@ export default class App extends React.Component {
      }
 
      updatePoints(value) {
+          /*
+          * updatePoints
+          * Creation date: Apr. 8, 2019
+          * Purpose: update taskPoints
+          */
           this.setState({ taskPoints: value });
           this.saveData();
      }

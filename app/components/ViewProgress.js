@@ -109,7 +109,7 @@ export default class ViewProgress extends Component {
 
 
 
-                         <Text>HP: 1/100000000 </Text>
+                         <Text>HP: {this.props.screenProps.taskPoints}/100000000 </Text>
                          <ProgressBarAndroid
                            styleAttr="Horizontal"
                            color='fff300'

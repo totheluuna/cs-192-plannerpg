@@ -77,17 +77,17 @@ export default StyleSheet.create({
      },
 
      displayMemos: {
-          flexWrap: 'wrap', 
+          flexWrap: 'wrap',
           flexDirection: 'row',
      },
      displayNoMemos: {
-          flex: 1, 
-          justifyContent: "center", 
+          flex: 1,
+          justifyContent: "center",
           alignItems: "center",
      },
      displayNoMemosText: {
-          color: '#445C70', 
-          fontSize: 20, 
+          color: '#445C70',
+          fontSize: 20,
           fontWeight:'bold',
      },
      corkboardBase: {
@@ -99,23 +99,23 @@ export default StyleSheet.create({
           height: null,
      },
      corkboardBackgroundPosition: {
-          paddingHorizontal: 20, 
+          paddingHorizontal: 20,
           paddingVertical: 10,
      },
      corkboardHeader: {
-          backgroundColor:'#5e3023', 
-          alignItems: 'center', 
+          backgroundColor:'#5e3023',
+          alignItems: 'center',
           justifyContent: 'center',
-          margin: 7,     
+          margin: 7,
           height: 80,
      },
      corkboardHeaderText: {
-          fontSize:70, 
-          fontWeight:'bold', 
+          fontSize:60,
+          fontWeight:'bold',
           color:'white',
      },
      fabPosition: {
-          flexDirection: 'row', 
+          flexDirection: 'row',
           justifyContent: 'flex-end',
      },
      fabColor: {
@@ -125,13 +125,13 @@ export default StyleSheet.create({
           backgroundColor:'#84cdee',
      },
      fabStyle: {
-          color: 'white', 
-          justifyContent: 'center', 
+          color: 'white',
+          justifyContent: 'center',
           fontSize: 30,
      },
      memoHeader: {
-          justifyContent: 'center', 
-          backgroundColor:'#895737', 
+          justifyContent: 'center',
+          backgroundColor:'#895737',
           height: 15,
      },
      memoStyle: {
@@ -140,15 +140,15 @@ export default StyleSheet.create({
      },
 
      tasklistBase: {
-          flexDirection:'row', 
+          flexDirection:'row',
           backgroundColor:'#edf7fc',
      },
      tasklistHeader: {
-          flexDirection:'column', 
-          width: 50, 
-          height: '100%', 
-          alignItems:'center', 
-          justifyContent:'center', 
+          flexDirection:'column',
+          width: 50,
+          height: '100%',
+          alignItems:'center',
+          justifyContent:'center',
           backgroundColor: '#50b8e7'
      },
      tasklistBackground: {
@@ -157,23 +157,23 @@ export default StyleSheet.create({
           height: null,
      },
      displayTasks: {
-          paddingHorizontal: 15, 
+          paddingHorizontal: 15,
           backgroundColor:'transparent',
      },
-     displayNoTasks: { 
-          flex: 1, 
-          justifyContent: "center", 
-          alignItems: "center", 
+     displayNoTasks: {
+          flex: 1,
+          justifyContent: "center",
+          alignItems: "center",
           paddingVertical: 40,
      },
-     displayNoTasksText: { 
-          color: 'black', 
-          fontSize:20, 
+     displayNoTasksText: {
+          color: 'black',
+          fontSize:20,
           fontWeight:'bold',
      },
      taskStyle: {
           backgroundColor: '#dcf0fa',
-          paddingHorizontal: 5, 
+          paddingHorizontal: 5,
           paddingBottom: 1,
           borderTopLeftRadius: 20,
           borderTopRightRadius: 20,
@@ -181,7 +181,7 @@ export default StyleSheet.create({
           borderBottomRightRadius: 20,
      },
      checkboxStyle: {
-          flex: 1, 
+          flex: 1,
           backgroundColor:'transparent',
      },
      taskCardStyle: {

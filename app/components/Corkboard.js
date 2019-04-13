@@ -74,8 +74,6 @@ import Memo from './Memo';
 import EditMemo from './EditMemo';
 import styles from './Styles';
 import cb from './cb.jpg';
-import { Col, Row, Grid } from "react-native-easy-grid";
-import SquareGrid from "react-native-square-grid"
 
 export default class Corkboard extends Component {
      constructor (props){
@@ -119,7 +117,7 @@ export default class Corkboard extends Component {
      render (){
           let memos = this.state.memoArray.map((memoItem) => {
                return <Memo
-                    id={memoItem.id}
+                    key={memoItem.id}
                     title={memoItem.title}
                     text={memoItem.text}
                     editMethod={ () => this.editMemo(memoItem.id) }
