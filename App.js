@@ -117,10 +117,10 @@ const TaskListNavigator = createStackNavigator(
 
 const AppTabNavigator = createMaterialTopTabNavigator(
      {
-          "Task List": TaskListNavigator,
-          Corkboard: CorkboardNavigator,
           Progress: ViewProgress,
           Calendar: CalendarNavigator,
+          "Task List": TaskListNavigator,
+          Corkboard: CorkboardNavigator,
      },
      {
           tabBarPosition: 'bottom',

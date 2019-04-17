@@ -30,8 +30,9 @@
 /*
  * Code History
 
- * 03/20/19 - Rheeca Guion - created file, added textinputs for editing schedule
- * 03/27/19 - Rheeca Guion - fixed calls to onDelete and onUpdate
+ * 03/20/19 - Rheeca Guion - Created file, added textinputs for editing schedule
+ * 03/27/19 - Rheeca Guion - Fixed calls to onDelete and onUpdate
+ * 04/17/19 - Rheeca Guion - Added TimePickerAndroid, and the functions timeToString and showPicker
  */
 
 /*
@@ -56,6 +57,7 @@ import {
      Keyboard,
      StyleSheet,
      AsyncStorage,
+     TimePickerAndroid,
 } from 'react-native';
 
 import {
@@ -83,13 +85,43 @@ export default class EditSchedule extends React.Component {
                scheduleTitle: this.props.navigation.getParam('title', 0),
                scheduleStart: this.props.navigation.getParam('start', 0),
                scheduleEnd: this.props.navigation.getParam('end', 0),
-               startHours: 0,
-               startMinutes: 0,
           };
      }
 
+     timeToString (hour, minute){
+          /*
+          * timeToString
+          * Creation date: Apr. 17, 2019
+          * Purpose: Returns the string form of the input
+          */
+          let hourNum = hour;
+          if (hourNum > 12) {
+               hourNum -= 12;
+          }
+          let m = (minute<10)?"0"+minute:minute;
+          let h = (hourNum<10)?"0"+hourNum:hourNum;
+          let string = h+":"+m;
+          string = (hour<11)?string+" AM":string+" PM";
+          return string;
+     }
+
+     async showPicker(stateKey, options) {
+          const TimePickerModule = require('NativeModules').TimePickerAndroid;
+          try {
+               const {action, hour, minute} = await TimePickerAndroid.open(options);
+               if (action !== TimePickerAndroid.dismissedAction) {
+                    if (stateKey == 'start') {
+                         this.setState({ scheduleStart: {hour: hour, minute: minute} });
+                    } else if (stateKey == 'end') {
+                         this.setState({ scheduleEnd: {hour: hour, minute: minute} });
+                    }
+               }
+          } catch (error) {
+               alert(error);
+          }
+     }
+
      render (){
-          const { startHours, startMinutes } = this.state;
           return (
                <View style={styles.editSchedule}>
                     <List>
@@ -99,21 +131,27 @@ export default class EditSchedule extends React.Component {
                          <ListItem>
                               <TextInput
                                    multiline = {true}
-                                   placeholder='Schedule'
+                                   placeholder='Title'
                                    value={this.state.scheduleTitle}
                                    onChangeText={(text) => this.setState({scheduleTitle: text})}/>
                          </ListItem>
                          <ListItem>
-                              <TextInput
-                                   placeholder='Start'
-                                   value={this.state.scheduleStart}
-                                   onChangeText={(text) => this.setState({scheduleStart: text})}/>
+                              <TouchableOpacity onPress={this.showPicker.bind(this, 'start', {
+                                   hour: this.state.scheduleStart.hour,
+                                   minute: this.state.scheduleStart.minute,
+                                   is24Hour: false,
+                              })}>
+                                   <Text>{this.timeToString(this.state.scheduleStart.hour, this.state.scheduleStart.minute)}</Text>
+                              </TouchableOpacity>
                          </ListItem>
                          <ListItem>
-                              <TextInput
-                                   placeholder='End'
-                                   value={this.state.scheduleEnd}
-                                   onChangeText={(text) => this.setState({scheduleEnd: text})}/>
+                              <TouchableOpacity onPress={this.showPicker.bind(this, 'end', {
+                                   hour: this.state.scheduleEnd.hour,
+                                   minute: this.state.scheduleEnd.minute,
+                                   is24Hour: false,
+                              })}>
+                                   <Text>{this.timeToString(this.state.scheduleEnd.hour, this.state.scheduleEnd.minute)}</Text>
+                              </TouchableOpacity>
                          </ListItem>
                          <ListItem>
                               <TouchableOpacity style={{marginRight: 20}} button transparent onPress={() => {

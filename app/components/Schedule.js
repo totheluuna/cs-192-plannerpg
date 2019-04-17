@@ -30,9 +30,10 @@
 /*
  * Code History
 
- * 03/05/19 - Rheeca Guion - created file
- * 03/27/19 - Rheeca Guion - removed textinputs to make component editable only in
+ * 03/05/19 - Rheeca Guion - Created file
+ * 03/27/19 - Rheeca Guion - Removed textinputs to make component editable only in
  *                           EditSchedule
+ * 04/17/19 - Rheeca Guion - Added timeToString
  */
 
 /*
@@ -51,26 +52,13 @@
 import React from 'react';
 import {
      View,
-     TextInput,
      TouchableOpacity,
-     TouchableWithoutFeedback,
-     Keyboard,
-     StyleSheet,
 } from 'react-native';
 
 import {
-     Container,
-     Header,
-     Content,
      List,
      ListItem,
      Text,
-     Body,
-     Left,
-     Right,
-     Button,
-     Icon,
-     Footer,
 } from 'native-base';
 
 export default class Schedule extends React.Component {
@@ -78,32 +66,43 @@ export default class Schedule extends React.Component {
           super(props);
      }
 
+     timeToString (hour, minute){
+          /*
+          * timeToString
+          * Creation date: Apr. 17, 2019
+          * Purpose: Returns the string form of the input
+          */
+          let hourNum = hour;
+          if (hourNum > 12) {
+               hourNum -= 12;
+          }
+          let m = (minute<10)?"0"+minute:minute;
+          let h = (hourNum<10)?"0"+hourNum:hourNum;
+          let string = h+":"+m;
+          string = (hour<11)?string+" AM":string+" PM";
+          return string;
+     }
+
      render (){
           let title = this.props.title;
           if (title == "") {
                title = "Title";
           }
-          let start = this.props.start;
-          if (start == "") {
-               start = "Start";
-          }
-          let end = this.props.end;
-          if (end == "") {
-               end = "End";
-          }
+          let startHour = this.props.start.hour;
+          let startMinute = this.props.start.minute;
+          let endHour = this.props.end.hour;
+          let endMinute = this.props.end.minute;
           return (
                <ListItem>
-                    <TouchableOpacity button transparent onPress={this.props.editMethod}>
-                         <Header>
-                              <Text>{title}</Text>
-                         </Header>
-                         <Body>
-                              <Text>{start}</Text>
-                              <Text>{end}</Text>
-                         </Body>
+                    <TouchableOpacity onPress={this.props.editMethod}>
+                         <Text>
+                              {title}
+                         </Text>
+                         <Text style={{ opacity: 0.2 }}>
+                              {this.timeToString(startHour, startMinute)} - {this.timeToString(endHour, endMinute)}
+                         </Text>
                     </TouchableOpacity>
                </ListItem>
-
           )
      }
 }

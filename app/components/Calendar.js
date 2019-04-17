@@ -43,8 +43,9 @@
 * 04/04/19 - Rheeca Guion - Added TouchableOpacity to the calendar dates
 * 04/05/19 - Rheeca Guion - Fixed inconsistencies in handling date
 *                         - Edited hasDate to use map rather than for loop
-                          - Fixed warning with key in a List and FlatList
-                          - Selected date is highlighted when selected
+*                         - Fixed warning with key in a List and FlatList
+*                         - Selected date is highlighted when selected
+* 04/17/19 - Rheeca Guion - Changed 'start' and 'end' to hold an object containing integers 'hour' and 'minute'
 */
 
 /*
@@ -83,7 +84,7 @@ import {
 
 } from 'native-base';
 
-import moment from "moment";
+import moment from 'moment';
 import Schedule from './Schedule';
 import styles from './Styles';
 
@@ -353,14 +354,16 @@ export default class Calendar extends React.Component {
           * Creation date: Mar. 5, 2019
           * Purpose: Adds a schedule
           */
+          let timeStart = { hour: 8, minute: 0 };
+          let timeEnd = { hour: 9, minute: 0 };
           if (this.hasDate(this.state.selectedDate)) {
                // Add schedules to date
                let currDate = this.getDate(this.state.selectedDate);
                let newSchedule = {
                     id: this.state.schedCurrId,
                     title: "",
-                    start: "",
-                    end: "",
+                    start: timeStart,
+                    end: timeEnd,
                };
                currDate.schedulesArray.push(newSchedule);
 
@@ -382,8 +385,8 @@ export default class Calendar extends React.Component {
                newDateWithSched.schedulesArray.push({
                     id: this.state.schedCurrId,
                     title: "",
-                    start: "",
-                    end: "",
+                    start: timeStart,
+                    end: timeEnd,
                });
                this.state.schedCurrId += 1;
                let arr = this.state.datesWithSchedules;
