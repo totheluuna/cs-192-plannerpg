@@ -67,9 +67,10 @@ import {
      AsyncStorage,
      ImageBackground,
      FlatList,
-     ListView
+     ListView,
+     StyleSheet
 } from 'react-native';
-import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab } from 'native-base';
+import { Container, Content, Header, Body, Left, Right, Title, Button, Icon, Fab, H1 } from 'native-base';
 import Memo from './Memo';
 import EditMemo from './EditMemo';
 import styles from './Styles';
@@ -113,6 +114,24 @@ export default class Corkboard extends Component {
                );
           }
      }
+     /* corkboard display */
+     // return (
+     //      <Container style={styles.corkboardBase}>
+     //        <Header style={styles.corkboardHeader}>
+     //           <Text style={styles.corkboardHeaderText}>CORKBOARD</Text>
+     //        </Header>
+     //        <ImageBackground source={cb} style={styles.corkboardBackground} resizeMode='stretch'>
+     //             <Content style={styles.corkboardBackgroundPosition}>
+     //                 {this.displayMemos(memos)}
+     //             </Content>
+     //             <View style={styles.fabPosition}>
+     //                  <Fab onPress={this.addMemo.bind(this)} position="bottomRight" style={styles.fabColor}>
+     //                       <Icon name='add' style={styles.fabStyle}/>
+     //                  </Fab>
+     //             </View>
+     //        </ImageBackground>
+     //      </Container>
+     // );
 
      render (){
           let memos = this.state.memoArray.map((memoItem) => {
@@ -125,21 +144,30 @@ export default class Corkboard extends Component {
           });
 
           return (
-               <Container style={styles.corkboardBase}>
-                 <Header style={styles.corkboardHeader}>
-                    <Text style={styles.corkboardHeaderText}>CORKBOARD</Text>
-                 </Header>
-                 <ImageBackground source={cb} style={styles.corkboardBackground} resizeMode='stretch'>
-                      <Content style={styles.corkboardBackgroundPosition}>
-                          {this.displayMemos(memos)}
-                      </Content>
-                      <View style={styles.fabPosition}>
-                           <Fab onPress={this.addMemo.bind(this)} position="bottomRight" style={styles.fabColor}>
-                                <Icon name='add' style={styles.fabStyle}/>
-                           </Fab>
-                      </View>
-                 </ImageBackground>
-               </Container>
+            <Container style={{backgroundColor: "#313131", paddingTop: 20}}>
+                <Header style={{backgroundColor: "#313131"}}>
+                    <Left>
+                         <Icon type="MaterialCommunityIcons" name="note-multiple-outline" style={{fontSize: 20, color: 'white'}}/>
+                    </Left>
+                    <Body>
+                        <Title>Corkboard</Title>
+                    </Body>
+                    <Right/>
+                </Header>
+                <View style = {styles.memosTitleView}>
+                    <H1 style = {styles.memosTitle}>
+                        Recent Memos
+                    </H1>
+                </View>
+                <Content style = {styles.memosContainer}>
+                    {this.displayMemos(memos)}
+                </Content>
+                <View style={styles.fabPosition}>
+                    <Fab onPress={this.addMemo.bind(this)} position="bottomRight" style={styles.fabColor3}>
+                        <Icon name='add' style={styles.fabStyle}/>
+                    </Fab>
+                </View>
+            </Container>
           );
      }
 
@@ -255,4 +283,27 @@ export default class Corkboard extends Component {
           }
           this.saveMemos();
      }
+
+
 }
+const styles2 = StyleSheet.create({
+    memosTitleView: {
+        backgroundColor: "#313131",
+        paddingLeft: 20
+    },
+
+    memosTitle: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#ffffff',
+        paddingTop: 20
+    },
+
+    memosContainer: {
+        flex: 1,
+        backgroundColor: '#313131',
+        marginTop: 20,
+        marginLeft: 20,
+        marginRight: 20,
+    }
+})

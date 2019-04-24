@@ -82,7 +82,7 @@ export default class Memo extends React.Component {
           return (
                <Card key={this.props.id} style={styles.memoStyle}>
                     <TouchableOpacity button transparent onPress={this.props.editMethod}>
-                         <CardItem header bordered style={styles.memoHeader}>
+                         <CardItem header bordered style={styles.memoHeader1}>
                               <Text style={{color:'white'}}>{title}</Text>
                          </CardItem>
                          <CardItem style={styles.memoStyle}>

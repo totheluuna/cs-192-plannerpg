@@ -57,7 +57,8 @@ import {
      Icon,
      View,
 } from 'native-base';
-import { Avatar } from 'react-native-elements'
+import { Avatar } from 'react-native-elements';
+import ProgressBar from 'react-native-progress/Bar';
 
 export default class ViewProgress extends Component {
      constructor (props){
@@ -70,78 +71,83 @@ export default class ViewProgress extends Component {
                expToLevel: 100,
           };
      }
+     // <Avatar
+     //      rounded
+     //      size="xlarge"
+     //      overlayContainerStyle={{backgroundColor: '#ffffff'}}
+     //      source={{
+     //           uri:"http://66.media.tumblr.com/52ea9ca1b6d4cfd8c97b5ee64236b5a2/tumblr_n0u2vtdmbZ1r6sk6wo1_400.gif"
+     //      }}
+     //      onPress={() => console.log("Works!")}
+     //      activeOpacity={0.7}
+     //      containerStyle={{flex: 3, marginTop: 100, flexDirection: 'row'}}
+     // />
      render() {
-          let hp = 500, max_hp = 500, name = 'luna', exp = 20, expToLevel = 100
+          let lvl = 78, hp = 350, max_hp = 5000, name = 'Artorias the Acads Slayer', exp = 2000, expToLevel = 10000
           return (
                <Container style={styles.container}>
 
-                    <Content contentContainerStyle={{alignItems: 'center'}}>
-
-                         <Avatar
-                              rounded
-                              size="xlarge"
-                              overlayContainerStyle={{backgroundColor: '#303030'}}
-                              source={{
-                                   uri:"https://i.imgur.com/HRp88EK.gif"
-                              }}
-                              onPress={() => console.log("Works!")}
-                              activeOpacity={0.7}
-                              containerStyle={{flex: 3, marginTop: 100, flexDirection: 'row'}}
-                         />
-
+                    <Content contentContainerStyle={{alignItems: 'center', paddingTop: 50}}>
+                            <Image
+                                style={{flex: 1,width: 400, height: 200}}
+                                source={{uri: 'http://66.media.tumblr.com/52ea9ca1b6d4cfd8c97b5ee64236b5a2/tumblr_n0u2vtdmbZ1r6sk6wo1_400.gif'}}/>
                     </Content>
+
                     <Content>
-
                          <Title>
                               <Text style={{
-                                   color: '#fe2030',
-                                   fontSize: 20,
+                                   color: '#aa3d3d',
+                                   fontSize: 24,
                                    fontWeight: 'bold'
-                              }}>RAGING CS STUDENT</Text>
+                              }}>{name}</Text>
                          </Title>
                          <Title>
                               <Text style={{
-                                   color: '#ff3020',
-                                   fontSize: 15,
+                                   color: '#707070',
+                                   fontSize: 18,
                                    fontWeight: 'bold'
-                              }}>LV. 9999</Text>
+                              }}>LV. {lvl}</Text>
                          </Title>
 
 
 
-                         <Text>HP: {this.props.screenProps.taskPoints}/100000000 </Text>
-                         <ProgressBarAndroid
+                         <Text style={styles.text}>HP: {hp}/{max_hp} </Text>
+                         <ProgressBar
+                           width={null}
+                           height={14}
                            styleAttr="Horizontal"
-                           color='fff300'
+                           color='#8D6BEA'
                            indeterminate={false}
-                           progress={0.01}
+                           progress={hp/max_hp}
                          />
 
-                         <Text>EXP: 999999/10000000</Text>
-                         <ProgressBarAndroid
+                         <Text style={styles.text}>EXP: {exp}/{expToLevel}</Text>
+                         <ProgressBar
+                             width={null}
+                             height={14}
                            animating={true}
-                           color='orange'
-                           styleAttr="Horizontal"
+                           color='#8D6BEA'
                            indeterminate={false}
-                           progress={9.9}
+                           progress={exp/expToLevel}
                          />
-                         <Text>Tasks: 2/CS 145</Text>
-                         <ProgressBarAndroid
+                         <Text style={styles.text}>Tasks: {this.props.screenProps.taskPoints}/100</Text>
+                         <ProgressBar
+                             width={null}
+                             height={14}
                            animating={true}
-                           color='red'
-                           styleAttr="Horizontal"
+                           color='#8D6BEA'
                            indeterminate={false}
                            progress={0.7}
                          />
-                         <Text>Events: 5/10 </Text>
-                         <ProgressBarAndroid
+                         <Text style={styles.text}>Events: 5/100 </Text>
+                         <ProgressBar
+                         width={null}
+                         height={14}
                            animating={true}
-                           color='green'
-                           styleAttr="Horizontal"
+                           color='#8D6BEA'
                            indeterminate={false}
                            progress={0.5}
                          />
-
                     </Content>
                </Container>
           )
@@ -149,12 +155,18 @@ export default class ViewProgress extends Component {
 }
 
 const styles = StyleSheet.create({
-     container: {
-          flex: 1,
-          justifyContent: 'space-evenly',
-          padding: 30,
-          backgroundColor: '#dad7cd'
-},
+    container: {
+      backgroundColor: '#313131',
+      flex: 1,
+      justifyContent: 'space-evenly',
+      padding: 30,
+
+    },
+    text: {
+        fontWeight:'bold',
+        color: '#828282'
+    }
+
 
 
 });

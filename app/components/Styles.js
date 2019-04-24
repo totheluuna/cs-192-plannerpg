@@ -28,6 +28,7 @@
  * 3/21/19 - Rheeca Guion - Added editSchedule, cell, weekCell
  * 4/01/19 - Rheeca Guion - Added editMemo, editTask, task
  * 4/04/19 - Vince Delos Santos - added everything from displayMemos to taskTextStyle
+ * 4/20/19 - Datuluna Ali Dilangalen - added memosTitleView, memosTitle, memosContainer
 */
 
 /*
@@ -118,11 +119,18 @@ export default StyleSheet.create({
           flexDirection: 'row',
           justifyContent: 'flex-end',
      },
+     fabPosition: {
+         flexDirection: 'column',
+         justifyContent: 'flex-end'
+     },
      fabColor: {
           backgroundColor:'#c08552',
      },
      fabColor2: {
           backgroundColor:'#84cdee',
+     },
+     fabColor3: {
+        backgroundColor: '#645657'
      },
      fabStyle: {
           color: 'white',
@@ -134,11 +142,36 @@ export default StyleSheet.create({
           backgroundColor:'#895737',
           height: 15,
      },
+     memoHeader1: {
+         justifyContent: 'center',
+         backgroundColor:'#a1d1a1',
+         height: 15,
+     },
      memoStyle: {
           backgroundColor:'#f3e9dc',
-          width: 155,
+          width: 180,
      },
-
+     memoStyle1: {
+         backgroundColor:'#e2eae2',
+         width: 360,
+     },
+     memosTitleView: {
+         backgroundColor: "#313131",
+         paddingLeft: 20
+     },
+     memosTitle: {
+         fontSize: 30,
+         fontWeight: 'bold',
+         color: '#ffffff',
+         paddingTop: 20
+     },
+     memosContainer: {
+         flex: 1,
+         backgroundColor: '#313131',
+         marginTop: 20,
+         marginLeft: 20,
+         marginRight: 20,
+     },
      tasklistBase: {
           flexDirection:'row',
           backgroundColor:'#edf7fc',
