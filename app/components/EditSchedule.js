@@ -75,7 +75,6 @@ import {
      Footer,
 } from 'native-base';
 import styles from './Styles';
-import TimePicker from 'react-native-simple-time-picker';
 
 export default class EditSchedule extends React.Component {
      constructor (props){

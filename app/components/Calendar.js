@@ -189,7 +189,7 @@ export default class Calendar extends React.Component {
                });
                return schedules;
           } else {
-               return <Text style={{justifyContent: 'center'}}>There are no schedules.</Text>;
+               return <Text style={{alignItems: 'center'}}>There are no schedules.</Text>;
           }
      }
 

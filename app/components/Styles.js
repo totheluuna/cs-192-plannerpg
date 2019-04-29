@@ -58,7 +58,7 @@ export default StyleSheet.create({
           justifyContent: 'center',
           flex: 1,
           margin: 1,
-          height: Dimensions.get('window').width / 9,
+          height: Dimensions.get('window').width / 10,
      },
      selectedCell: {
           backgroundColor: '#DDFFF6',
@@ -66,7 +66,7 @@ export default StyleSheet.create({
           justifyContent: 'center',
           flex: 1,
           margin: 1,
-          height: Dimensions.get('window').width / 9,
+          height: Dimensions.get('window').width / 10,
      },
      weekCell: {
           backgroundColor: '#FBFBFF',
@@ -74,7 +74,7 @@ export default StyleSheet.create({
           justifyContent: 'center',
           flex: 1,
           margin: 1,
-          height: Dimensions.get('window').width / 9,
+          height: Dimensions.get('window').width / 10,
      },
 
      displayMemos: {
