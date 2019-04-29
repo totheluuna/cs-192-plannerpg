@@ -46,6 +46,7 @@
 *                         - Fixed warning with key in a List and FlatList
 *                         - Selected date is highlighted when selected
 * 04/17/19 - Rheeca Guion - Changed 'start' and 'end' to hold an object containing integers 'hour' and 'minute'
+* 04/29/19 - Rheeca Guion - Schedules are sorted by start time
 */
 
 /*
@@ -367,10 +368,18 @@ export default class Calendar extends React.Component {
                };
                currDate.schedulesArray.push(newSchedule);
 
+               let sorted = currDate.schedulesArray.sort((a, b) => {
+                    if (a.start.hour == b.start.hour) {
+                         return a.start.minute - b.start.minute;
+                    } else {
+                         return a.start.hour - b.start.hour;
+                    }
+               });
+
                let arr = this.state.datesWithSchedules;
                let arr2 = arr.map((dateItem) => {
                     if (moment(dateItem.date).isSame(currDate.date, 'day')) {
-                         dateItem.schedulesArray = currDate.schedulesArray;
+                         dateItem.schedulesArray = sorted;
                     }
                     return dateItem;
                });
@@ -432,11 +441,17 @@ export default class Calendar extends React.Component {
           let arr = this.state.datesWithSchedules;
           let arr2 = arr.map((dateItem) => {
                if (moment(dateItem.date).isSame(currDate.date, 'day')) {
-                    dateItem.schedulesArray.map((schedItem) => {
+                    dateItem.schedulesArray = dateItem.schedulesArray.map((schedItem) => {
                          if(schedItem.id == id) {
                               schedItem = schedule;
                          }
                          return schedItem;
+                    }).sort((a, b) => {
+                         if (a.start.hour == b.start.hour) {
+                              return a.start.minute - b.start.minute;
+                         } else {
+                              return a.start.hour - b.start.hour;
+                         }
                     });
                }
                return dateItem;
