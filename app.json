@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "HelloWorld",
-    "slug": "HelloWorld",
-    "privacy": "public",
+    "name": "PlanneRPG",
+    "icon":"./plannerpg-icon.png",
+    "slug": "PlanneRPG",
+    "privacy": "unlisted",
     "sdkVersion": "32.0.0",
     "platforms": [
       "ios",
@@ -10,7 +11,6 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -24,6 +24,9 @@
     ],
     "ios": {
       "supportsTablet": true
+    },
+    "android": {
+      "package": "com.plannerpg"
     }
   }
 }

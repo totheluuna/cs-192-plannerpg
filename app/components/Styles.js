@@ -29,6 +29,7 @@
  * 4/01/19 - Rheeca Guion - Added editMemo, editTask, task
  * 4/04/19 - Vince Delos Santos - added everything from displayMemos to taskTextStyle
  * 4/20/19 - Datuluna Ali Dilangalen - added memosTitleView, memosTitle, memosContainer
+ * 4/30/19 - Rheeca Guion - Added highlightedCell
 */
 
 /*
@@ -54,6 +55,14 @@ export default StyleSheet.create({
      },
      cell: {
           backgroundColor: '#C1FFF0',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flex: 1,
+          margin: 1,
+          height: Dimensions.get('window').width / 10,
+     },
+     highlightedCell: {
+          backgroundColor: '#39A2AE',
           alignItems: 'center',
           justifyContent: 'center',
           flex: 1,

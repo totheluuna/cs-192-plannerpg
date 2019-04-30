@@ -34,6 +34,11 @@
 *                          AppContainer
 * 4/04/19 - Vince Delos Santos - Modified AppTabNavigator & StackNavigators for TaskList and Corkboard
 * 4/08/19 - Rheeca Guion - Created function updatePoints
+* 4/30/19 - Rheeca Guion - Created completedTasks, totalTasks, and totalEvents
+*                        - Created function updateTotalTasks, updateTotalEvents, updateExp
+*                        - Renamed updatePoints to updateCompletedTasks
+*                        - Created function saveTotalTasks, saveTotalEvents, saveExp
+*                        - Renamed saveData to saveCompletedTasks
 */
 
 /*
@@ -146,7 +151,10 @@ export default class App extends React.Component {
           super();
           this.state = {
                isReady: false,
-               taskPoints: 0,
+               completedTasks: 0,
+               totalTasks: 0,
+               totalEvents: 0,
+               exp: 0,
           };
      }
 
@@ -175,14 +183,45 @@ export default class App extends React.Component {
           alert("Cleared Storage");
      }
 
-     updatePoints(value) {
+     updateCompletedTasks(value) {
           /*
-          * updatePoints
+          * updateCompletedTasks
           * Creation date: Apr. 8, 2019
-          * Purpose: update taskPoints
+          * Purpose: update completedTasks
           */
-          this.setState({ taskPoints: value });
-          this.saveData();
+          this.setState({ completedTasks: value });
+          this.saveCompletedTasks();
+     }
+
+     updateTotalTasks(value) {
+          /*
+          * updateTotalTasks
+          * Creation date: Apr. 30, 2019
+          * Purpose: update totalTasks
+          */
+          this.setState({ totalTasks: value });
+          this.saveTotalTasks();
+     }
+
+     updateTotalEvents(value) {
+          /*
+          * updateTotalEvents
+          * Creation date: Apr. 30, 2019
+          * Purpose: update totalEvents
+          */
+          this.setState({ totalEvents: value });
+          this.saveTotalEvents();
+     }
+
+     updateExp(value) {
+          /*
+          * updateExp
+          * Creation date: Apr. 30, 2019
+          * Purpose: update exp
+          */
+          let newExp = this.state.exp + value;
+          this.setState({ exp: newExp });
+          this.saveExp();
      }
 
      render() {
@@ -192,20 +231,68 @@ export default class App extends React.Component {
 
           return (
                <Container>
-                    <AppContainer screenProps={{ taskPoints: this.state.taskPoints, updatePoints: this.updatePoints.bind(this) }} />
+                    <AppContainer screenProps={{
+                         completedTasks: this.state.completedTasks,
+                         totalTasks: this.state.totalTasks,
+                         totalEvents: this.state.totalEvents,
+                         exp: this.state.exp,
+                         updateCompletedTasks: this.updateCompletedTasks.bind(this),
+                         updateTotalTasks: this.updateTotalTasks.bind(this),
+                         updateTotalEvents: this.updateTotalEvents.bind(this),
+                         updateExp: this.updateExp.bind(this),
+                    }} />
                     <Button title="Clear Async Storage" onPress={this.clearAsyncStorage} />
                </Container>
           );
      }
 
-     saveData = async() => {
+     saveCompletedTasks = async() => {
           /*
-          * saveData
+          * saveCompletedTasks
           * Creation date: Apr. 4, 2019
-          * Purpose: Save data in AsyncStorage
+          * Purpose: Save completedTasks in AsyncStorage
           */
           try {
-               await AsyncStorage.setItem('taskPoints', JSON.stringify(this.state.taskPoints));
+               await AsyncStorage.setItem('completedTasks', JSON.stringify(this.state.completedTasks));
+          } catch (error) {
+               alert(error);
+          }
+     };
+
+     saveTotalTasks = async() => {
+          /*
+          * saveTotalTasks
+          * Creation date: Apr. 30, 2019
+          * Purpose: Save totalTasks in AsyncStorage
+          */
+          try {
+               await AsyncStorage.setItem('totalTasks', JSON.stringify(this.state.totalTasks));
+          } catch (error) {
+               alert(error);
+          }
+     };
+
+     saveTotalEvents = async() => {
+          /*
+          * saveTotalEvents
+          * Creation date: Apr. 30, 2019
+          * Purpose: Save totalEvents in AsyncStorage
+          */
+          try {
+               await AsyncStorage.setItem('totalEvents', JSON.stringify(this.state.totalEvents));
+          } catch (error) {
+               alert(error);
+          }
+     };
+
+     saveExp = async() => {
+          /*
+          * saveExp
+          * Creation date: Apr. 30, 2019
+          * Purpose: Save exp in AsyncStorage
+          */
+          try {
+               await AsyncStorage.setItem('exp', JSON.stringify(this.state.exp));
           } catch (error) {
                alert(error);
           }
@@ -218,10 +305,37 @@ export default class App extends React.Component {
           * Purpose: Get saved data from AsyncStorage
           */
           try {
-               let temp = await AsyncStorage.getItem('taskPoints');
+               let temp = await AsyncStorage.getItem('completedTasks');
                let parsed = JSON.parse(temp);
                if(parsed) {
-                    this.setState({taskPoints: parsed})
+                    this.setState({completedTasks: parsed})
+               }
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               let temp = await AsyncStorage.getItem('totalTasks');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({totalTasks: parsed})
+               }
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               let temp = await AsyncStorage.getItem('totalEvents');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({totalEvents: parsed})
+               }
+          } catch (error) {
+               alert(error);
+          }
+          try {
+               let temp = await AsyncStorage.getItem('exp');
+               let parsed = JSON.parse(temp);
+               if(parsed) {
+                    this.setState({exp: parsed})
                }
           } catch (error) {
                alert(error);

@@ -1,6 +1,6 @@
 /*
 * MIT License
-* Copyright (c) 2019 Datuluna Ali Dilangalen
+* Copyright (c) 2019 Datuluna Ali Dilangalen, Rheeca Guion
 * Permission is hereby granted, free of charge, to any person obtaining a copy
 * of this software and associated documentation files (the "Software"), to deal
 * in the Software without restriction, including without limitation the rights
@@ -20,6 +20,14 @@
 * supervision of Asst. Prof. Ma. Rowena C. Solamo of the Department of Computer
 * Science, College of Engineering, University of the Philippines, Diliman for the
 * AY 2018-2019
+*/
+
+/*
+ * Code History
+
+ * 3/22/19 - Datuluna Dilangalen - Created file
+ * 4/30/19 - Rheeca Guion - Created function calculateTaskProgress
+ *                        - Exp, tasks, and events points calculations for the progress bars
 */
 
 /*
@@ -63,13 +71,6 @@ import ProgressBar from 'react-native-progress/Bar';
 export default class ViewProgress extends Component {
      constructor (props){
           super(props);
-          this.state = {
-               username: 'luna',
-               max_hp: 100,
-               health: 50,
-               exp: 20,
-               expToLevel: 100,
-          };
      }
      // <Avatar
      //      rounded
@@ -82,8 +83,28 @@ export default class ViewProgress extends Component {
      //      activeOpacity={0.7}
      //      containerStyle={{flex: 3, marginTop: 100, flexDirection: 'row'}}
      // />
+
+     calculateTaskProgress() {
+          /*
+          * calculateTaskProgress
+          * Creation date: Apr. 30, 2019
+          * Purpose: Calculates completedTasks to totalTasks ratio
+          */
+          let totalTasks = this.props.screenProps.totalTasks;
+          let completedTasks = this.props.screenProps.completedTasks;
+          if (completedTasks > 0) {
+               return completedTasks/totalTasks;
+          }
+          return 0;
+     }
+
      render() {
-          let lvl = 78, hp = 350, max_hp = 5000, name = 'Artorias the Acads Slayer', exp = 2000, expToLevel = 10000
+          let lvl = Math.floor((this.props.screenProps.exp/10))+1
+          let hp = 100
+          let max_hp = 100
+          let name = 'Artorias the Acads Slayer'
+          let exp = this.props.screenProps.exp%10
+          let expToLevel = 10
           return (
                <Container style={styles.container}>
 
@@ -130,23 +151,23 @@ export default class ViewProgress extends Component {
                            indeterminate={false}
                            progress={exp/expToLevel}
                          />
-                         <Text style={styles.text}>Tasks: {this.props.screenProps.taskPoints}/100</Text>
+                         <Text style={styles.text}>Tasks: {this.props.screenProps.completedTasks}/{this.props.screenProps.totalTasks}</Text>
                          <ProgressBar
                              width={null}
                              height={14}
                            animating={true}
                            color='#8D6BEA'
                            indeterminate={false}
-                           progress={0.7}
+                           progress={this.calculateTaskProgress()}
                          />
-                         <Text style={styles.text}>Events: 5/100 </Text>
+                         <Text style={styles.text}>Events: {this.props.screenProps.totalEvents}/100 </Text>
                          <ProgressBar
                          width={null}
                          height={14}
                            animating={true}
                            color='#8D6BEA'
                            indeterminate={false}
-                           progress={0.5}
+                           progress={this.props.screenProps.totalEvents/100}
                          />
                     </Content>
                </Container>
@@ -166,7 +187,4 @@ const styles = StyleSheet.create({
         fontWeight:'bold',
         color: '#828282'
     }
-
-
-
 });
