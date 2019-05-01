@@ -46,6 +46,9 @@
 *                         - Fixed warning with key in a List and FlatList
 *                         - Selected date is highlighted when selected
 * 04/17/19 - Rheeca Guion - Changed 'start' and 'end' to hold an object containing integers 'hour' and 'minute'
+* 04/29/19 - Rheeca Guion - Schedules are sorted by start time
+* 04/30/19 - Rheeca Guion - The screenProps totalEvents and exp are updated as events are created and deleted
+*                         - Days with schedules now have a different color 
 */
 
 /*
@@ -98,6 +101,8 @@ export default class Calendar extends React.Component {
                selectedDate: today,
                datesWithSchedules: [],
                schedCurrId: 0,
+               totalEvents: this.props.screenProps.totalEvents,
+               expToAdd: 0,
           };
      }
 
@@ -105,7 +110,7 @@ export default class Calendar extends React.Component {
           this.getSchedules();
      }
 
-     isEmpty (obj) {
+     isEmpty (arr) {
           /*
           * isEmpty
           * Creation date: Mar. 5, 2019
@@ -188,7 +193,7 @@ export default class Calendar extends React.Component {
                });
                return schedules;
           } else {
-               return <Text style={{justifyContent: 'center'}}>There are no schedules.</Text>;
+               return <Text style={{alignItems: 'center'}}>There are no schedules.</Text>;
           }
      }
 
@@ -260,7 +265,16 @@ export default class Calendar extends React.Component {
           if (item.empty === true) {
                return <View style={styles.cell} />;
           }
-          let style = moment(item.date).isSame(item.selected) ? styles.cell : styles.selectedCell;
+          let style = styles.cell;
+          let currDate = this.getDate(item.date);
+          if (currDate) {
+               if (!this.isEmpty(currDate.schedulesArray)) {
+                    style = styles.highlightedCell;
+               }
+          }
+          if (moment(item.date).isSame(item.selected)) {
+               style = styles.selectedCell;
+          }
           return (
                <TouchableOpacity style={style} onPress={() => this.onDateClick(item.date)}>
                     <Text >{item.formDay}</Text>
@@ -367,10 +381,18 @@ export default class Calendar extends React.Component {
                };
                currDate.schedulesArray.push(newSchedule);
 
+               let sorted = currDate.schedulesArray.sort((a, b) => {
+                    if (a.start.hour == b.start.hour) {
+                         return a.start.minute - b.start.minute;
+                    } else {
+                         return a.start.hour - b.start.hour;
+                    }
+               });
+
                let arr = this.state.datesWithSchedules;
                let arr2 = arr.map((dateItem) => {
                     if (moment(dateItem.date).isSame(currDate.date, 'day')) {
-                         dateItem.schedulesArray = currDate.schedulesArray;
+                         dateItem.schedulesArray = sorted;
                     }
                     return dateItem;
                });
@@ -393,6 +415,8 @@ export default class Calendar extends React.Component {
                arr.push(newDateWithSched);
                this.setState({ datesWithSchedules: arr });
           }
+          this.setState({ totalEvents: this.state.totalEvents + 1 });
+          this.setState({ expToAdd: this.state.expToAdd + 1 });
           this.saveSchedules();
      }
 
@@ -432,11 +456,17 @@ export default class Calendar extends React.Component {
           let arr = this.state.datesWithSchedules;
           let arr2 = arr.map((dateItem) => {
                if (moment(dateItem.date).isSame(currDate.date, 'day')) {
-                    dateItem.schedulesArray.map((schedItem) => {
+                    dateItem.schedulesArray = dateItem.schedulesArray.map((schedItem) => {
                          if(schedItem.id == id) {
                               schedItem = schedule;
                          }
                          return schedItem;
+                    }).sort((a, b) => {
+                         if (a.start.hour == b.start.hour) {
+                              return a.start.minute - b.start.minute;
+                         } else {
+                              return a.start.hour - b.start.hour;
+                         }
                     });
                }
                return dateItem;
@@ -461,6 +491,9 @@ export default class Calendar extends React.Component {
           } catch (error) {
                alert(error);
           }
+          this.props.screenProps.updateTotalEvents(this.state.totalEvents);
+          this.props.screenProps.updateExp(this.state.expToAdd);
+          this.setState({ expToAdd: 0 });
      }
 
      getSchedules = async () => {
@@ -509,6 +542,8 @@ export default class Calendar extends React.Component {
                return dateItem;
           });
           this.setState({ datesWithSchedules: arr2 });
+          this.setState({ totalEvents: this.state.totalEvents - 1 });
+          this.setState({ expToAdd: this.state.expToAdd - 1 });
           this.saveSchedules();
      }
 }

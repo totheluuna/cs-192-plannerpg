@@ -35,7 +35,9 @@ tasks array to display, tasks
 *                        - fixed saveTasks and getTasks so data can be stored in
 *                           AsyncStorage
 * 4/04/19 - Vince Delos Santos - added styles to containers, texts, and headers. Added images and buttons
-* 4/08/19 - Rheeca Guion - taskPoints are updated when checkboxes are ticked 
+* 4/08/19 - Rheeca Guion - completedTasks are updated when checkboxes are ticked
+* 4/30/19 - Rheeca Guion - The screenProps completedTasks, totalTasks and exp are updated as tasks are created,
+*                          completed and deleted
 */
 
 /*
@@ -85,7 +87,9 @@ export default class TaskList extends Component {
           this.state = {
                taskArray: [],
                taskCurrId: 0,
-               taskPoints: this.props.screenProps.taskPoints,
+               completedTasks: this.props.screenProps.completedTasks,
+               totalTasks: this.props.screenProps.totalTasks,
+               expToAdd: 0,
           };
      }
 
@@ -156,17 +160,20 @@ export default class TaskList extends Component {
           /*
           * tickCheckBox
           * Creation date: Apr. 01, 2019
-          * Purpose: Updates taskPoints when a task is checked or unchecked
+          * Purpose: Updates completedTasks when a task is checked or unchecked
           */
           let arr = this.state.taskArray;
-          let points = this.state.taskPoints;
+          let points = this.state.completedTasks;
+          let expoints = this.state.expToAdd;
 
           let newArr = arr.map((taskItem) => {
                if(taskItem.id == id) {
                     if(taskItem.isChecked) {
-                         this.setState({ taskPoints: points-1 });
+                         this.setState({ completedTasks: points-1 });
+                         this.setState({ expToAdd: expoints-1 });
                     } else {
-                         this.setState({ taskPoints: points+1 });
+                         this.setState({ completedTasks: points+1 });
+                         this.setState({ expToAdd: expoints+1 });
                     }
                     taskItem.isChecked = !(taskItem.isChecked);
                }
@@ -192,6 +199,9 @@ export default class TaskList extends Component {
           arr.push(newTask);
           this.setState({ taskCurrId: this.state.taskCurrId + 1 });
           this.setState({ taskArray: arr });
+          let taskTotal = this.state.totalTasks;
+          this.setState({ totalTasks: taskTotal + 1 });
+          this.saveTasks();
      }
 
      editTask (id){
@@ -246,7 +256,10 @@ export default class TaskList extends Component {
           } catch (error) {
                alert(error);
           }
-          this.props.screenProps.updatePoints(this.state.taskPoints); // notes: when this line is placed in tickCheckBox, the value received by ViewProgress is delayed by one step
+          this.props.screenProps.updateCompletedTasks(this.state.completedTasks); // notes: when this line is placed in tickCheckBox, the value received by ViewProgress is delayed by one step
+          this.props.screenProps.updateTotalTasks(this.state.totalTasks);
+          this.props.screenProps.updateExp(this.state.expToAdd);
+          this.setState({ expToAdd: 0 });
      };
 
      getTasks = async () => {
@@ -283,10 +296,19 @@ export default class TaskList extends Component {
           */
           let task = this.findObjectById(this.state.taskArray, id);
           if (task){
+               if (task.isChecked){
+
+               }
                let arr = this.state.taskArray;
                arr.splice(arr.indexOf(task), 1);
                this.setState({taskArray: arr});
           }
+          let total = this.state.totalTasks;
+          let completed = this.state.completedTasks;
+          if (task.isChecked) {
+               this.setState({ completedTasks: completed - 1 });
+          }
+          this.setState({ totalTasks: total - 1 });
           this.saveTasks();
      }
 }

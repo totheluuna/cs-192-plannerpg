@@ -75,7 +75,6 @@ import {
      Footer,
 } from 'native-base';
 import styles from './Styles';
-import TimePicker from 'react-native-simple-time-picker';
 
 export default class EditSchedule extends React.Component {
      constructor (props){
@@ -139,7 +138,7 @@ export default class EditSchedule extends React.Component {
                               <TouchableOpacity onPress={this.showPicker.bind(this, 'start', {
                                    hour: this.state.scheduleStart.hour,
                                    minute: this.state.scheduleStart.minute,
-                                   is24Hour: false,
+                                   is24Hour: true,
                               })}>
                                    <Text>{this.timeToString(this.state.scheduleStart.hour, this.state.scheduleStart.minute)}</Text>
                               </TouchableOpacity>
