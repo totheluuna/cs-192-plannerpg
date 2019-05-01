@@ -53,7 +53,7 @@ export default StyleSheet.create({
           margin: 20,
      },
      cell: {
-          backgroundColor: '#C1FFF0',
+          backgroundColor: '#645f89',
           alignItems: 'center',
           justifyContent: 'center',
           flex: 1,
@@ -61,7 +61,7 @@ export default StyleSheet.create({
           height: Dimensions.get('window').width / 9,
      },
      selectedCell: {
-          backgroundColor: '#DDFFF6',
+          backgroundColor: '#eeaf36',
           alignItems: 'center',
           justifyContent: 'center',
           flex: 1,
@@ -69,7 +69,7 @@ export default StyleSheet.create({
           height: Dimensions.get('window').width / 9,
      },
      weekCell: {
-          backgroundColor: '#FBFBFF',
+          backgroundColor: '#684632',
           alignItems: 'center',
           justifyContent: 'center',
           flex: 1,
@@ -110,11 +110,6 @@ export default StyleSheet.create({
           margin: 7,
           height: 80,
      },
-     corkboardHeaderText: {
-          fontSize:60,
-          fontWeight:'bold',
-          color:'white',
-     },
      fabPosition: {
           flexDirection: 'row',
           justifyContent: 'flex-end',
@@ -127,10 +122,10 @@ export default StyleSheet.create({
           backgroundColor:'#c08552',
      },
      fabColor2: {
-          backgroundColor:'#84cdee',
+          backgroundColor:'#7289da',
      },
      fabColor3: {
-        backgroundColor: '#645657'
+        backgroundColor: '#73f218'
      },
      fabStyle: {
           color: 'white',
@@ -173,24 +168,31 @@ export default StyleSheet.create({
          marginRight: 20,
      },
      tasklistBase: {
-          flexDirection:'row',
-          backgroundColor:'#edf7fc',
+          paddingTop: 24,
+          //flexDirection:'row',
+          backgroundColor:'#000000',
+     },
+     tasklistHeaderText: {
+          fontSize:20,
+          fontWeight:'bold',
+          color:'white',
      },
      tasklistHeader: {
-          flexDirection:'column',
-          width: 50,
-          height: '100%',
+          //flexDirection:'column',
+          //height: 75,
           alignItems:'center',
-          justifyContent:'center',
-          backgroundColor: '#50b8e7'
+          justifyContent:'flex-start',
+          backgroundColor: 'black',
      },
      tasklistBackground: {
           flex: 1,
+          backgroundColor: '#2c2f33',
           width: null,
           height: null,
      },
      displayTasks: {
-          paddingHorizontal: 15,
+          paddingHorizontal: 20,
+          paddingVertical: 5,
           backgroundColor:'transparent',
      },
      displayNoTasks: {
@@ -205,7 +207,7 @@ export default StyleSheet.create({
           fontWeight:'bold',
      },
      taskStyle: {
-          backgroundColor: '#dcf0fa',
+          backgroundColor: '#99aab5',
           paddingHorizontal: 5,
           paddingBottom: 1,
           borderTopLeftRadius: 20,

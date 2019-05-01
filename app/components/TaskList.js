@@ -71,6 +71,9 @@ import {
      Icon,
      View,
      Fab,
+     Left,
+     Body,
+     Right,
 } from 'native-base';
 import Task from './Task';
 import styles from './Styles';
@@ -127,9 +130,15 @@ export default class TaskList extends Component {
           return (
                <Container style={styles.tasklistBase}>
                     <Header style={styles.tasklistHeader}>
-                         <Text style={styles.corkboardHeaderText}>TASKLIST</Text>
+                         <Left>
+                              <Icon type="MaterialCommunityIcons" name="dns" style={{fontSize: 20, color: 'white'}}/>
+                         </Left>
+                         <Body>
+                              <Text style={styles.tasklistHeaderText}>Tasklist</Text>
+                         </Body>
+                         <Right/>
                     </Header>
-                    <ImageBackground source={tl} style={styles.tasklistBackground} resizeMode='cover'>
+                    <View style={styles.tasklistBackground}>
                          <Content style={styles.displayTasks}>
                               {this.displayTasks(tasks)}
                          </Content>
@@ -138,7 +147,7 @@ export default class TaskList extends Component {
                                    <Icon name='add' style={styles.fabStyle}/>
                               </Fab>
                          </View>
-                    </ImageBackground>
+                    </View>
                </Container>
           );
      }
