@@ -241,7 +241,6 @@ export default class App extends React.Component {
                          updateTotalEvents: this.updateTotalEvents.bind(this),
                          updateExp: this.updateExp.bind(this),
                     }} />
-                    <Button title="Clear Async Storage" onPress={this.clearAsyncStorage} />
                </Container>
           );
      }

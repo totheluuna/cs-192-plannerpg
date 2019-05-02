@@ -93,12 +93,12 @@ export default class Schedule extends React.Component {
           let endHour = this.props.end.hour;
           let endMinute = this.props.end.minute;
           return (
-               <ListItem style={{backgroundColor:"#138200"}}>
+               <ListItem style={{backgroundColor: "2c2f33"}}>
                     <TouchableOpacity onPress={this.props.editMethod}>
-                         <Text>
+                         <Text style={{ color:"#D5DAE0" }}>
                               {title}
                          </Text>
-                         <Text style={{ opacity: 0.2 }}>
+                         <Text style={{ color:"#D5DAE0", opacity: 0.5 }}>
                               {this.timeToString(startHour, startMinute)} - {this.timeToString(endHour, endMinute)}
                          </Text>
                     </TouchableOpacity>

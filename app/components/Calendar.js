@@ -48,7 +48,7 @@
 * 04/17/19 - Rheeca Guion - Changed 'start' and 'end' to hold an object containing integers 'hour' and 'minute'
 * 04/29/19 - Rheeca Guion - Schedules are sorted by start time
 * 04/30/19 - Rheeca Guion - The screenProps totalEvents and exp are updated as events are created and deleted
-*                         - Days with schedules now have a different color 
+*                         - Days with schedules now have a different color
 */
 
 /*
@@ -77,14 +77,17 @@ import {
 } from 'react-native';
 
 import {
+     Body,
      Button,
      Container,
      Content,
+     Fab,
      Header,
      Icon,
+     Left,
      List,
      ListItem,
-
+     Right,
 } from 'native-base';
 
 import moment from 'moment';
@@ -193,7 +196,11 @@ export default class Calendar extends React.Component {
                });
                return schedules;
           } else {
-               return <Text style={{alignItems: 'center'}}>There are no schedules.</Text>;
+               return (
+                    <View style={styles.displayNoTasks}>
+                         <Text style={styles.displayNoTasksText}>There are no schedules to show.</Text>
+                    </View>
+               );
           }
      }
 
@@ -208,13 +215,13 @@ export default class Calendar extends React.Component {
           return (
                <View style={{flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
                     <Button onPress={this.prevMonth} transparent>
-                         <Icon name='arrow-back' style={{color: '#445C70'}}/>
+                         <Icon name='arrow-back' style={{color: '#D5DAE0'}}/>
                     </Button>
-                    <Text>
+                    <Text style={{ color:"#D5DAE0" }}>
                          {moment(this.state.currentMonth).format(dateFormat)}
                     </Text>
                     <Button onPress={this.nextMonth} transparent>
-                         <Icon name='arrow-forward' style={{color: '#445C70'}} />
+                         <Icon name='arrow-forward' style={{color: '#D5DAE0'}} />
                     </Button>
                </View>
           );
@@ -342,22 +349,33 @@ export default class Calendar extends React.Component {
 
      render (){
           return (
-               <Container>
-                    <View style={{paddingHorizontal: 50}}>
-                         {this.renderHeader()}
-                         {this.renderWeek()}
-                         {this.renderDays()}
+               <Container style={styles.tasklistBase}>
+                    <Header style={styles.tasklistHeader}>
+                         <Left>
+                              <Icon type="MaterialCommunityIcons" name="dns" style={{fontSize: 20, color: 'white'}}/>
+                         </Left>
+                         <Body>
+                              <Text style={styles.tasklistHeaderText}>Calendar</Text>
+                         </Body>
+                         <Right/>
+                    </Header>
+                    <View style={styles.tasklistBackground}>
+                         <View style={{paddingHorizontal: 50, paddingBottom: 20}}>
+                              {this.renderHeader()}
+                              {this.renderWeek()}
+                              {this.renderDays()}
+                         </View>
+                         <Content>
+                              <List>
+                                   {this.displaySchedules(this.state.selectedDate)}
+                              </List>
+                         </Content>
+                         <View style={styles.fabPosition}>
+                              <Fab onPress={this.addSchedule.bind(this)} position="bottomRight" style={styles.fabColor2}>
+                                   <Icon name='add' style={styles.fabStyle}/>
+                              </Fab>
+                         </View>
                     </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                         <Button onPress={ this.addSchedule.bind(this) } transparent >
-                              <Icon name='add' style={{color: '#E2858D'}}/>
-                         </Button>
-                    </View>
-                    <Content>
-                         <List>
-                              {this.displaySchedules(this.state.selectedDate)}
-                         </List>
-                    </Content>
                </Container>
           );
      }

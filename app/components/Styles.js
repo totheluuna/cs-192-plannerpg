@@ -62,7 +62,7 @@ export default StyleSheet.create({
           height: Dimensions.get('window').width / 10,
      },
      highlightedCell: {
-          backgroundColor: '#39A2AE',
+          backgroundColor: '#4D496B',
           alignItems: 'center',
           justifyContent: 'center',
           flex: 1,
@@ -96,7 +96,7 @@ export default StyleSheet.create({
           alignItems: "center",
      },
      displayNoMemosText: {
-          color: '#445C70',
+          color: '#D5DAE0',
           fontSize: 20,
           fontWeight:'bold',
      },
@@ -211,7 +211,7 @@ export default StyleSheet.create({
           paddingVertical: 40,
      },
      displayNoTasksText: {
-          color: 'black',
+          color: '#D5DAE0',
           fontSize:20,
           fontWeight:'bold',
      },
