@@ -111,7 +111,7 @@ export default class Task extends React.Component {
                          <CardItem style={styles.checkboxStyle}>
                               {this.renderCheckBox()}
                          </CardItem>
-                         <TouchableOpacity button transparent onPress={this.props.editMethod}>
+                         <TouchableOpacity style={{flex:1}} button transparent onPress={this.props.editMethod}>
                               <CardItem style={styles.taskCardStyle}>
                                    <View>
                                         <Text style={styles.taskTextStyle}>{text}</Text>

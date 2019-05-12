@@ -225,10 +225,11 @@ export default StyleSheet.create({
           borderBottomRightRadius: 20,
      },
      checkboxStyle: {
-          flex: 1,
+          
           backgroundColor:'transparent',
      },
      taskCardStyle: {
+          flex: 1,
           backgroundColor: 'transparent',
      },
      taskTextStyle: {

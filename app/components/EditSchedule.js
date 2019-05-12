@@ -125,10 +125,8 @@ export default class EditSchedule extends React.Component {
                <View style={styles.editSchedule}>
                     <List>
                          <ListItem>
-                              <Text>{this.state.scheduleId}</Text>
-                         </ListItem>
-                         <ListItem>
                               <TextInput
+                                   style={{flex:1}}
                                    multiline = {true}
                                    placeholder='Title'
                                    value={this.state.scheduleTitle}

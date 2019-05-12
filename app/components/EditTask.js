@@ -43,7 +43,7 @@
 
 * Variables:
 *   taskId: contains task idea
-*   taskIsChecked: contains boolean value whether task is done or not 
+*   taskIsChecked: contains boolean value whether task is done or not
 *   taskText: contains task text
 */
 
@@ -85,10 +85,8 @@ export default class Task extends React.Component {
                <View style={styles.editTask}>
                     <List>
                          <ListItem>
-                              <Text>{this.state.taskId}</Text>
-                         </ListItem>
-                         <ListItem>
                               <TextInput
+                                   style={{flex:1}}
                                    multiline = {true}
                                    placeholder='Task'
                                    value={this.state.taskText}

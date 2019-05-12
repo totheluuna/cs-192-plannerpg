@@ -83,10 +83,8 @@ export default class EditMemo extends React.Component {
                <View style={styles.editMemo}>
                     <List>
                          <ListItem>
-                              <Text>{this.state.memoId}</Text>
-                         </ListItem>
-                         <ListItem>
                               <TextInput
+                                   style={{flex:1}}
                                    multiline = {true}
                                    placeholder='Title'
                                    value={this.state.memoTitle}
@@ -94,6 +92,7 @@ export default class EditMemo extends React.Component {
                          </ListItem>
                          <ListItem>
                               <TextInput
+                                   style={{flex:1}}
                                    multiline = {true}
                                    placeholder='Memo'
                                    value={this.state.memoText}
