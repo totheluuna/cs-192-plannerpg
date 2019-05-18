@@ -225,7 +225,6 @@ export default StyleSheet.create({
           borderBottomRightRadius: 20,
      },
      checkboxStyle: {
-          
           backgroundColor:'transparent',
      },
      taskCardStyle: {
