@@ -72,17 +72,17 @@ export default class ViewProgress extends Component {
      constructor (props){
           super(props);
      }
-     // <Avatar
-     //      rounded
-     //      size="xlarge"
-     //      overlayContainerStyle={{backgroundColor: '#ffffff'}}
-     //      source={{
-     //           uri:"http://66.media.tumblr.com/52ea9ca1b6d4cfd8c97b5ee64236b5a2/tumblr_n0u2vtdmbZ1r6sk6wo1_400.gif"
-     //      }}
-     //      onPress={() => console.log("Works!")}
-     //      activeOpacity={0.7}
-     //      containerStyle={{flex: 3, marginTop: 100, flexDirection: 'row'}}
-     // />
+     <Avatar
+           rounded
+           size="xlarge"
+           overlayContainerStyle={{backgroundColor: '#ffffff'}}
+           source={{
+                uri:"http://66.media.tumblr.com/52ea9ca1b6d4cfd8c97b5ee64236b5a2/tumblr_n0u2vtdmbZ1r6sk6wo1_400.gif"
+           }}
+           onPress={() => console.log("Works!")}
+           activeOpacity={0.7}
+           containerStyle={{flex: 3, marginTop: 100, flexDirection: 'row'}}
+      />
 
      calculateTaskProgress() {
           /*
