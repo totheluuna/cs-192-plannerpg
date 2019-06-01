@@ -1,3 +1,2 @@
 # PlanneRPG: A CS 192 Software Engineering Project
-## Overview
-# Installation (Expo Prototype)
+PlanneRPG aims to motivate the user by simply tallying their achievements and rewarding them with simple points for every task done and every event attended. Also, it aims to help the user manage their endeavors and commitments with three features: Calendar, Corkboard, Tasklist. The overall feel of the app is to be a little push for everyday struggles, a mini manager for daily routines, and having a little fun by accomplishing the said tasks 
