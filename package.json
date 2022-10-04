@@ -9,7 +9,7 @@
   "dependencies": {
     "@expo/vector-icons": "^9.0.0",
     "create-react-context": "^0.2.3",
-    "expo": "^32.0.0",
+    "expo": "^46.0.14",
     "moment": "^2.24.0",
     "native-base": "^2.11.0",
     "react": "16.5.0",
